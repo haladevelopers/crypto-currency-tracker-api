@@ -15,29 +15,20 @@ public class ConversionController {
     private long autoIncrementId = 1;
 
     public ConversionController() {
-        // Lesson 1: English grammar rule + Interactive Question parameters
+        // Initial core curriculum items with pre-set quizzes
         educationCatalog.add(new Lesson(1, "English", "Mastering the Present Continuous Tense",
                 "Use this tense for actions happening right now! Structure: Subject + am/is/are + Verb(ing). Example: 'I am learning code right now.'",
                 "Tip: Look around your room and say out loud what your family members are doing!",
                 "Identify the correct Present Continuous statement below:",
                 new String[]{"He runs to school yesterday.", "She is speaking English beautifully.", "They will study tomorrow."},
-                1)); // "She is speaking..." sits at index spot 1
+                1));
 
-        // Lesson 2: AI Literacy + Interactive Question parameters
         educationCatalog.add(new Lesson(2, "AI", "Introduction to Prompt Engineering",
-                "AI outputs are only as good as your inputs. Always give the AI a Role, a Task, and a Context. Example: 'Act as a professional English tutor, correct my grammar in this sentence...'",
+                "AI outputs are only as good as your inputs. Always give the AI a Role, a Task, and a Context. Example: 'Act as a professional English tutor...'",
                 "Tip: Try starting your next query with 'Act as an expert software tester'!",
                 "What are the three essential components of a perfect foundational AI prompt?",
                 new String[]{"Role, Task, and Context", "Username, Password, and Code", "Laptop, Internet, and Browser"},
-                0)); // "Role, Task..." sits at index spot 0
-
-        // Lesson 3: Mobile Monetization + Interactive Question parameters
-        educationCatalog.add(new Lesson(3, "Earning", "Setting Up Your Mobile Upwork Account",
-                "You do not need an expensive laptop to start. Use the official Upwork Mobile App to browse entry-level data tasks, verify your identity securely, and message prospective global clients.",
-                "Tip: Ensure your profile summary highlights absolute clarity and technical focus!",
-                "True or False: Can you manage, bid, and communicate with global clients on Upwork entirely using a mobile phone?",
-                new String[]{"False, a laptop is completely mandatory.", "True, the mobile app handles full freelance profiles.", "Only for sending emails."},
-                1));
+                0));
     }
 
     @GetMapping("/api/convert")
@@ -59,22 +50,28 @@ public class ConversionController {
                 .collect(Collectors.toList());
     }
 
+    // 🌟 FULLY DYNAMIC: Now accepts custom quiz structures directly from your web dashboard input array!
     @GetMapping("/api/lessons/add")
     public List<Lesson> addNewLessonFromForm(
             @RequestParam("category") String category,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam("tip") String tip) {
+            @RequestParam("tip") String tip,
+            @RequestParam("quizQuestion") String quizQuestion,
+            @RequestParam("opt0") String opt0,
+            @RequestParam("opt1") String opt1,
+            @RequestParam("opt2") String opt2,
+            @RequestParam("correctIdx") int correctIdx) {
 
         long nextLessonId = educationCatalog.size() + 1;
 
-        // Provide standard fallback quiz placeholders for custom web forms submitted on-the-fly
-        Lesson customLesson = new Lesson(nextLessonId, category, title, content, tip,
-                "Practice Check: Did you read and understand the instructional guidelines provided inside this module?",
-                new String[]{"Yes, completely understood!", "I need to read it one more time.", "Skip practice checking."},
-                0);
+        // Assemble the custom options array layout packages
+        String[] customOptions = new String[]{opt0, opt1, opt2};
 
-        educationCatalog.add(customLesson);
+        // Create the fully tailored custom Lesson object
+        Lesson dynamicLesson = new Lesson(nextLessonId, category, title, content, tip, quizQuestion, customOptions, correctIdx);
+
+        educationCatalog.add(dynamicLesson);
         return educationCatalog;
     }
 
