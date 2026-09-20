@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "lessons")
@@ -16,10 +17,19 @@ public class Lesson {
 
     private String category;
     private String title;
+
+    @Column(columnDefinition = "TEXT") // Unlocks unlimited text length
     private String content;
+
+    @Column(columnDefinition = "TEXT")
     private String interactiveTip;
+
+    @Column(columnDefinition = "TEXT")
     private String quizQuestion;
+
+    @Column(columnDefinition = "TEXT")
     private String quizOptionsRaw;
+
     private int correctOptionIndex;
 
     public Lesson() {}
@@ -32,7 +42,6 @@ public class Lesson {
         this.interactiveTip = interactiveTip;
         this.quizQuestion = quizQuestion;
         this.setQuizOptions(quizOptions);
-
         this.correctOptionIndex = correctOptionIndex;
     }
 
@@ -46,7 +55,7 @@ public class Lesson {
     public int getCorrectOptionIndex() { return correctOptionIndex; }
 
     public String[] getQuizOptions() {
-        if (this.quizOptionsRaw == null) return new String[0]; // 🌟 FIXED SYNTAX BUG HERE
+        if (this.quizOptionsRaw == null) return new String[0];
         return this.quizOptionsRaw.split("###");
     }
 
