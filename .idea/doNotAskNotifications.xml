@@ -3,7 +3,9 @@
   <component name="DoNotAskProjectManager">
     <option name="idToDisplayName">
       <map>
+        <entry key="WindowsDefender" value="Microsoft Defender may affect IDE" />
         <entry key="external.system.autolink.unlinked.project.notification" value="" />
+        <entry key="git.push.result" value="" />
       </map>
     </option>
   </component>

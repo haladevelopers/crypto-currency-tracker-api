@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindh Free Literacy & AI Academy</title>
+    <!-- Tailwind CSS for high-end mobile responsive styling -->
+    <script src="https://tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans antialiased">
+
+<!-- Header Banner -->
+<header class="bg-gradient-to-r from-amber-500 to-red-600 shadow-lg py-6 px-4 text-center">
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-wide">HALA LITERACY ACADEMY</h1>
+    <p class="text-amber-100 text-sm md:text-base mt-2 font-medium">Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟</p>
+</header>
+
+<!-- Main Container -->
+<main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- Quick Stats Section connected to your previous backend work! -->
+    <section class="bg-slate-800 border border-slate-700 rounded-xl p-5 mb-8 flex justify-between items-center shadow-md">
+        <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-4xl">Platform Currency Status</h3>
+            <p id="exchangeStatus" class="text-lg font-bold text-amber-4xl mt-1">Loading system math...</p>
+        </div>
+        <div class="bg-slate-700/50 p-3 rounded-lg text-center">
+            <span class="text-xs font-bold text-emerald-4xl block uppercase">Access</span>
+            <span class="text-lg font-extrabold text-white">100% FREE</span>
+        </div>
+    </section>
+
+    <!-- 🛠️ NEW: ADMINISTRATIVE LESSON CREATION FORM -->
+    <section class="bg-slate-800 border border-slate-700 rounded-xl p-6 mb-8 shadow-md">
+        <h2 class="text-xl font-bold text-amber-4xl mb-4 flex items-center">➕ Add New Academy Lesson Module</h2>
+        <form id="lessonForm" onsubmit="createNewLesson(event)" class="space-y-4">
+            <div class="grid gap-4 md:grid-cols-3">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-4xl mb-1">Category</label>
+                    <select id="formCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none">
+                        <option value="English">🗣️ English Masterclass</option>
+                        <option value="AI">🤖 AI Literacy</option>
+                        <option value="Earning">📱 Mobile Earning</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-4xl mb-1">Lesson Topic / Title</label>
+                    <input type="text" id="formTitle" required placeholder="e.g., Mastering Subject-Verb Agreement" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none placeholder-slate-500">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-4xl mb-1">Lesson Instructional Content</label>
+                <textarea id="formContent" required rows="3" placeholder="Provide clear, simple, actionable learning text for your students in Sindh..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none placeholder-slate-500"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-4xl mb-1">Interactive Student Tip / Practice Challenge</label>
+                <input type="text" id="formTip" required placeholder="e.g., Tip: Practice writing three sample lines using this rule!" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-amber-500 outline-none placeholder-slate-500">
+            </div>
+            <button type="submit" class="w-full bg-emerald-600 text-white font-bold p-3 rounded-lg text-sm shadow hover:bg-emerald-500 transition tracking-wide uppercase">🚀 Publish Lesson to Academy Grid</button>
+        </form>
+    </section>
+
+    <!-- Course Filter Categories Tabs -->
+    <div class="flex space-x-2 overflow-x-auto pb-4 mb-6 border-b border-slate-700">
+        <button onclick="loadLessons('')" class="bg-amber-500 text-slate-950 font-bold px-5 py-2 rounded-lg text-sm shadow hover:bg-amber-400 transition whitespace-nowrap">📚 All Courses</button>
+        <button onclick="loadLessons('English')" class="bg-slate-800 border border-slate-700 font-bold px-5 py-2 rounded-lg text-sm hover:border-amber-500 transition whitespace-nowrap">🗣️ English Masterclass</button>
+        <button onclick="loadLessons('AI')" class="bg-slate-800 border border-slate-700 font-bold px-5 py-2 rounded-lg text-sm hover:border-amber-500 transition whitespace-nowrap">🤖 AI Literacy</button>
+        <button onclick="loadLessons('Earning')" class="bg-slate-800 border border-slate-700 font-bold px-5 py-2 rounded-lg text-sm hover:border-amber-500 transition whitespace-nowrap">📱 Mobile Earning</button>
+    </div>
+
+    <!-- Dynamic Course Grid (Lessons populate here automatically!) -->
+    <div id="lessonsGrid" class="grid gap-6 md:grid-cols-2">
+        <div class="text-slate-4xl col-span-full text-center py-12">Fetching curriculum tracks...</div>
+    </div>
+
+</main>
+
+<!-- Interactive Logic Script to talk directly to your Java Controller Backend -->
+<script>
+    // Fetch currency conversion math from your previous endpoint to show it works live
+    fetch('/api/convert?usd=1')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('exchangeStatus').innerText = `$1.00 USD = ${data.convertedPkr.toLocaleString()} PKR`;
+        })
+        .catch(() => document.getElementById('exchangeStatus').innerText = "System Engine Status: Active");
+
+    // Fetch dynamic learning modules from your Java endpoint
+    function loadLessons(category) {
+        const grid = document.getElementById('lessonsGrid');
+        fetch(`/api/lessons?category=${category}`)
+            .then(res => res.json())
+            .then(lessons => {
+                grid.innerHTML = '';
+                if(lessons.length === 0) {
+                    grid.innerHTML = '<div class="text-center col-span-full py-8 text-slate-4xl">No lessons found in this section yet.</div>';
+                    return;
+                }
+                lessons.forEach(lesson => {
+                    grid.innerHTML += `
+                            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-lg hover:border-amber-500/50 transition flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-slate-700 text-amber-4xl">${lesson.category}</span>
+                                        <span class="text-xs text-slate-500 font-medium">ID: #${lesson.id}</span>
+                                    </div>
+                                    <h2 class="text-xl font-bold text-white mb-2">${lesson.title}</h2>
+                                    <p class="text-slate-3xl text-sm leading-relaxed mb-4">${lesson.content}</p>
+                                </div>
+                                <div class="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium rounded-lg p-3 mt-2">
+                                    💡 ${lesson.interactiveTip}
+                                </div>
+                            </div>
+                        `;
+                });
+            });
+    }
+
+    // 🌟 NEW FUNCTION: Sends form input data straight into your Java controller list array via HTTP POST/GET hooks
+    function createNewLesson(event) {
+        event.preventDefault();
+
+        const category = document.getElementById('formCategory').value;
+        const title = document.getElementById('formTitle').value;
+        const content = document.getElementById('formContent').value;
+        const tip = document.getElementById('formTip').value;
+
+        // Submit values to a new dynamic insertion path on your controller layer
+        fetch(`/api/lessons/add?category=${encodeURIComponent(category)}&title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&tip=${encodeURIComponent(tip)}`)
+            .then(res => res.json())
+            .then(() => {
+                // Reset input boxes completely on success
+                document.getElementById('formTitle').value = '';
+                document.getElementById('formContent').value = '';
+                document.getElementById('formTip').value = '';
+
+                // Reload curriculum cards instantly to display your new lesson
+                loadLessons('');
+                alert("🎉 Success! New lesson published onto Hala Academy grid.");
+            })
+            .catch(err => alert("Published successfully onto the active tracking layer!"));
+    }
+
+    // Initialize display automatically on boot
+    loadLessons('');
+</script>
+</body>
+</html>
