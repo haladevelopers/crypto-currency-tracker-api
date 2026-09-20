@@ -67,7 +67,6 @@
         fetch(`/api/lessons?category=${cat}`).then(res=>res.json()).then(data=>{
             const g = document.getElementById('lessonsGrid'); g.innerHTML = '';
             data.forEach(l=>{
-                // Build option strings dynamically from the data arrays
                 let optionsHtml = '';
                 l.quizOptions.forEach((opt, idx) => {
                     optionsHtml += `<button onclick="checkAnswer(${l.id}, ${idx}, ${l.correctOptionIndex})" class="quiz-option" id="opt-${l.id}-${idx}">${opt}</button>`;
@@ -81,7 +80,6 @@
                                 <p style="color:#cbd5e1;font-size:0.9rem;margin:0 0 10px 0">${l.content}</p>
                                 <div class="tip">💡 ${l.interactiveTip}</div>
                             </div>
-                            <!-- 🧠 DYNAMIC QUIZ SYSTEM DISPLAY -->
                             <div class="quiz-sec">
                                 <strong style="font-size:0.9rem;color:#f8fafc">📝 Mini Quiz Challenge:</strong>
                                 <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px">${l.quizQuestion}</div>
@@ -93,27 +91,20 @@
         });
     }
 
-    // 🧠 FUNCTION: Checks if the clicked button matches the correct database index
     function checkAnswer(lessonId, chosenIdx, correctIdx) {
         const feedback = document.getElementById(`feedback-${lessonId}`);
         feedback.style.display = "block";
-
-        // Loop and clear out any colored borders from previous clicks
         for (let i = 0; i < 3; i++) {
             const btn = document.getElementById(`opt-${lessonId}-${i}`);
             if (btn) btn.style.borderColor = "#475569";
         }
-
         const selectedBtn = document.getElementById(`opt-${lessonId}-${chosenIdx}`);
-
         if (chosenIdx === correctIdx) {
-            feedback.style.backgroundColor = "rgba(16,185,129,0.15)";
-            feedback.style.color = "#34d399";
+            feedback.style.backgroundColor = "rgba(16,185,129,0.15)"; feedback.style.color = "#34d399";
             feedback.innerText = "🎯 Correct! Excellent work, your answer is exactly right.";
             if (selectedBtn) selectedBtn.style.borderColor = "#10b981";
         } else {
-            feedback.style.backgroundColor = "rgba(239,68,68,0.15)";
-            feedback.style.color = "#f87171";
+            feedback.style.backgroundColor = "rgba(239,68,68,0.15)"; feedback.style.color = "#f87171";
             feedback.innerText = "❌ Incorrect. Try reading the instructional tip text above and attempt again!";
             if (selectedBtn) selectedBtn.style.borderColor = "#ef4444";
         }
@@ -122,18 +113,29 @@
     function createNewLesson(e) {
         e.preventDefault();
         const cat = document.getElementById('formCategory').value, t = document.getElementById('formTitle').value, c = document.getElementById('formContent').value, tp = document.getElementById('formTip').value;
-        fetch(`/api/lessons/add?category=${encodeURIComponent(cat)}&title=${encodeURIComponent(t)}&content=${encodeURIComponent(c)}&tip=${encodeURIComponent(tp)}`).then(res=>res.json()).then(()=>{
+        fetch(`/api/lessons/add?category=${encodeURIComponent(cat)}&title=${encodeURIComponent(t)}&content=${encodeURIComponent(c)}&tip=${encodeURIComponent(tp)}`).then(res=>res.json()).then(() => {
             document.getElementById('formTitle').value=''; document.getElementById('formContent').value=''; document.getElementById('formTip').value='';
-            loadLessons(document.querySelector('.tabs button.active').innerText.replace('All Courses',''), document.querySelector('.tabs button.active'));
+            loadLessons('', document.querySelector('.tabs button'));
         });
     }
+
+    // 🔒 SECURE DELETION SECURITY PANEL VALIDATION LOOP
     function deleteLesson(id) {
-        if(confirm("Remove this lesson?")) {
-            fetch(`/api/lessons/delete?id=${id}`).then(res=>res.json()).then(()=>{
-                loadLessons(document.querySelector('.tabs button.active').innerText.replace('All Courses',''), document.querySelector('.tabs button.active'));
+        const masterPass = "12345";
+        const enteredPass = prompt("🔐 Enter Master Admin Code to verify curriculum deletion rights:");
+
+        if (enteredPass === null) return; // User canceled the box
+
+        if (enteredPass === masterPass) {
+            fetch(`/api/lessons/delete?id=${id}`).then(res=>res.json()).then(() => {
+                loadLessons('', document.querySelector('.tabs button'));
+                alert("🗑️ Lesson successfully removed from curriculum grid.");
             });
+        } else {
+            alert("❌ Access Denied! Invalid Administrative Code.");
         }
     }
+
     loadLessons('');
 </script>
 </body>
