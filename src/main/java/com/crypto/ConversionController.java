@@ -62,4 +62,16 @@ public class ConversionController {
         educationCatalog.add(customLesson);
         return educationCatalog;
     }
+
+    // 🗑️ NEW ENDPOINT: Deletes a specific lesson from the catalog using its unique ID number
+    @GetMapping("/api/lessons/delete")
+    public List<Lesson> deleteLessonById(@RequestParam("id") long lessonId) {
+
+        // Search the memory array table and remove the item that matches the target ID number
+        educationCatalog.removeIf(lesson -> lesson.getId() == lessonId);
+
+        // Return the updated, clean collection list back to the browser user interface
+        return educationCatalog;
+    }
+
 }
