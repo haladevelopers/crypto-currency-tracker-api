@@ -16,13 +16,17 @@
         .tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; border-bottom: 1px solid #334155; padding-bottom: 10px; }
         .tabs button { background: #1e293b; border: 1px solid #334155; color: white; padding: 6px 16px; border-radius: 6px; cursor: pointer; }
         .tabs button.active { background: #fbbf24; color: #0f172a; }
-        .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
         .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
         .card-hd { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8rem; }
         .tag { color: #fbbf24; font-weight: bold; }
         .btn-del { background: none; border: none; color: #64748b; cursor: pointer; font-weight: bold; }
         .btn-del:hover { color: #ef4444; }
-        .tip { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: #fde047; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px; }
+        .tip { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); color: #fde047; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 10px; margin-bottom: 12px; }
+        .quiz-sec { background: #0f172a; padding: 12px; border-radius: 6px; border: 1px solid #475569; margin-top: 8px; }
+        .quiz-option { width: 100%; text-align: left; background: #1e293b; border: 1px solid #475569; padding: 8px 12px; color: white; border-radius: 4px; margin-top: 6px; cursor: pointer; font-size: 0.85rem; }
+        .quiz-option:hover { border-color: #fbbf24; }
+        .quiz-feedback { font-size: 0.85rem; font-weight: bold; margin-top: 8px; padding: 6px; border-radius: 4px; display: none; }
     </style>
 </head>
 <body>
@@ -57,15 +61,64 @@
 </main>
 <script>
     fetch('/api/convert?usd=1').then(res=>res.json()).then(d=>{document.getElementById('exchangeStatus').innerText=`$1.00 USD = ${d.convertedPkr} PKR`;});
+
     function loadLessons(cat, btn) {
         if(btn){document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');}
         fetch(`/api/lessons?category=${cat}`).then(res=>res.json()).then(data=>{
             const g = document.getElementById('lessonsGrid'); g.innerHTML = '';
             data.forEach(l=>{
-                g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">✕ Delete</button></div><h3 style="margin:0 0 8px 0">${l.title}</h3><p style="color:#cbd5e1;font-size:0.9rem;margin:0 0 10px 0">${l.content}</p><div class="tip">💡 ${l.interactiveTip}</div></div>`;
+                // Build option strings dynamically from the data arrays
+                let optionsHtml = '';
+                l.quizOptions.forEach((opt, idx) => {
+                    optionsHtml += `<button onclick="checkAnswer(${l.id}, ${idx}, ${l.correctOptionIndex})" class="quiz-option" id="opt-${l.id}-${idx}">${opt}</button>`;
+                });
+
+                g.innerHTML += `
+                        <div class="card">
+                            <div>
+                                <div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">✕ Delete</button></div>
+                                <h3 style="margin:0 0 8px 0">${l.title}</h3>
+                                <p style="color:#cbd5e1;font-size:0.9rem;margin:0 0 10px 0">${l.content}</p>
+                                <div class="tip">💡 ${l.interactiveTip}</div>
+                            </div>
+                            <!-- 🧠 DYNAMIC QUIZ SYSTEM DISPLAY -->
+                            <div class="quiz-sec">
+                                <strong style="font-size:0.9rem;color:#f8fafc">📝 Mini Quiz Challenge:</strong>
+                                <div style="font-size:0.85rem;color:#94a3b8;margin-top:4px">${l.quizQuestion}</div>
+                                <div class="options-container" id="options-${l.id}">${optionsHtml}</div>
+                                <div class="quiz-feedback" id="feedback-${l.id}"></div>
+                            </div>
+                        </div>`;
             });
         });
     }
+
+    // 🧠 FUNCTION: Checks if the clicked button matches the correct database index
+    function checkAnswer(lessonId, chosenIdx, correctIdx) {
+        const feedback = document.getElementById(`feedback-${lessonId}`);
+        feedback.style.display = "block";
+
+        // Loop and clear out any colored borders from previous clicks
+        for (let i = 0; i < 3; i++) {
+            const btn = document.getElementById(`opt-${lessonId}-${i}`);
+            if (btn) btn.style.borderColor = "#475569";
+        }
+
+        const selectedBtn = document.getElementById(`opt-${lessonId}-${chosenIdx}`);
+
+        if (chosenIdx === correctIdx) {
+            feedback.style.backgroundColor = "rgba(16,185,129,0.15)";
+            feedback.style.color = "#34d399";
+            feedback.innerText = "🎯 Correct! Excellent work, your answer is exactly right.";
+            if (selectedBtn) selectedBtn.style.borderColor = "#10b981";
+        } else {
+            feedback.style.backgroundColor = "rgba(239,68,68,0.15)";
+            feedback.style.color = "#f87171";
+            feedback.innerText = "❌ Incorrect. Try reading the instructional tip text above and attempt again!";
+            if (selectedBtn) selectedBtn.style.borderColor = "#ef4444";
+        }
+    }
+
     function createNewLesson(e) {
         e.preventDefault();
         const cat = document.getElementById('formCategory').value, t = document.getElementById('formTitle').value, c = document.getElementById('formContent').value, tp = document.getElementById('formTip').value;
