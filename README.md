@@ -1,48 +1,35 @@
-# Enterprise Multi-Currency Exchange Rate REST API Microservice
+# 🎓 Full-Stack Java Spring Boot Web Portal & RESTful Data Engine
 
-A production-ready **Spring Boot REST API** microservice engineered to process dynamic multi-currency conversions and maintain a transactional ledger state utilizing optimized in-memory array collections. This project is built utilizing structural object-oriented patterns and is fully optimized for containerization or remote microservice distribution architectures.
-
-## Key Architectural Features
-- **RESTful Endpoints:** Fully mapped HTTP GET routers returning auto-serialized JSON data payloads.
-- **State Preservation Tier:** Built-in automated transaction collection framework that simulates database rows completely offline.
-- **Automated Lifecycle Compilation:** Powered by Apache Maven for dynamic dependency, indexing, and runtime version management.
-
-## Tech Stack & Prerequisites
-- **Language Platform:** Java 17 / Java 27 (Oracle OpenJDK)
-- **Framework Suite:** Spring Boot 3.2.4 (Spring Web Core Engine)
-- **Dependency Manager:** Apache Maven (Project Object Model Engine)
-- **Development Workspace:** IntelliJ IDEA
-
-## API Endpoints & Usage Guide
-
-### 1. Execute Live Currency Conversion
-- **URL Endpoint Path:** `http://localhost:8080/api/convert`
-- **Method Structure:** `GET`
-- **URL Parameter Key:** `usd` (Type: `double`, Default: `1`)
-
-#### Sample Target Request URL
-```text
-http://localhost:8080/api/convert?usd=10.00
-```
-
-#### Expected Automated JSON Output Response
-```json
-{
-  "id": 4,
-  "baseCurrency": "USD",
-  "originalAmountUsd": 10.0,
-  "convertedEur": 9.1,
-  "convertedPkr": 2785.0,
-  "convertedInr": 834.0,
-  "timestamp": "2026-09-18T14:22:21.192994800"
-}
-```
-
-### 2. Retrieve Transaction Audit Log History
-- **URL Endpoint Path:** `http://localhost:8080/api/history`
-- **Method Structure:** `GET`
+An autonomous, database-persistent, interactive e-learning platform and concurrent multi-currency conversion REST API microservice. Engineered under the corporate brand **haladevelopers** specifically to provide high-impact, localized digital literacy for the youth of Sindh, Pakistan.
 
 ---
-## Author Portfolio
-- **Developer Name:** [Sultan Mehmood]
-- **Specialization:** Java Backend Architect & Spring Boot REST API Developer
+
+## 📸 Platform Interface Preview
+
+### 🗣️ Localized Sindhi Language Interface (Right-to-Left Layout)
+![Sindh Academy Sindhi Interface](https://githubusercontent.com)
+
+### 🇬🇧 English Masterclass Interface (Standard Grid Layout)
+![Sindh Academy English Interface](https://githubusercontent.com)
+
+---
+
+## 🛠️ Core Architectural Capabilities & Tech Stack
+
+- **Relational Data Persistence Layer:** Integrated **Spring Data JPA & Hibernate** frameworks wired directly to an embedded relational databank engine (**H2/MySQL**) running persistent file state systems.
+- **Visual Web Database Control Room:** Configured active embedded database web console pathways (`/h2-console`) allowing live, transactional SQL query tracking and real-time schema audits.
+- **Dynamic Curriculum & Quiz Curation Engines:** Built scalable backend model schemas capable of parsing complex client-side instructional text, custom multiple-choice options arrays, and designated correct option parameters dynamically on-the-fly.
+- **Bi-Directional Multilingual Toggle Engine:** Developed a high-efficiency JavaScript translation dictionary module capable of switching all fixed UI labels, selection items, currency status grids, and instructional content between English and localized **Sindhi Arabic typography** with an adaptive **Right-to-Left (RTL)** text alignment grid layout.
+- **Administrative Access Security Checkpoints:** Enforced server-side entry gate authentication parameters on sensitive data nodes, safeguarding lesson deletion mechanics behind a master password validation layer.
+- **Modular Enterprise Lifecycle Build:** Powered by **Apache Maven dependency engines** to guarantee clean build cycles, zero-downtime execution maps, and a fully containerization-ready state.
+
+---
+
+## 🔌 API Documentation & Verification Endpoints
+
+- **`GET /`** - Access the live visual web platform dashboard interface.
+- **`GET /api/lessons`** - Dynamic retrieval stream of curriculum blocks (Supports filtering via `?category=English|AI|Earning`).
+- **`GET /api/lessons/add`** - Secured parameter injection route to store custom lesson modules natively to hard drive storage tables.
+- **`GET /api/lessons/delete`** - Authentication gate validation endpoint to purge specific records by unique primary keys.
+- **`GET /api/convert`** - Automated currency conversion matrix tracking USD, EUR, INR, and PKR parameters concurrently.
+- **`GET /api/history`** - System transaction ledger logging calculation query histories.
