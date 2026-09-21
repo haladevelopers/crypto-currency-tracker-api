@@ -1,8 +1,10 @@
 package com.crypto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +47,13 @@ public class ConversionController {
             @RequestParam("opt0") String opt0,
             @RequestParam("opt1") String opt1,
             @RequestParam("opt2") String opt2,
-            @RequestParam("correctIdx") int correctIdx) {
+            @RequestParam("correctIdx") int correctIdx,
+            @RequestParam(value = "videoUrl", defaultValue = "") String videoUrl) {
 
         String[] customOptions = new String[]{opt0, opt1, opt2};
-        Lesson dynamicLesson = new Lesson(category, title, content, tip, quizQuestion, customOptions, correctIdx);
+        Lesson dynamicLesson = new Lesson(category, title, content, tip, quizQuestion, customOptions, correctIdx, videoUrl);
         lessonRepository.save(dynamicLesson);
         return lessonRepository.findAll();
-
     }
 
     @GetMapping("/api/lessons/delete")

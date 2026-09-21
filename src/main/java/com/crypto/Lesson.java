@@ -18,7 +18,7 @@ public class Lesson {
     private String category;
     private String title;
 
-    @Column(columnDefinition = "TEXT") // Unlocks unlimited text length
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(columnDefinition = "TEXT")
@@ -32,10 +32,13 @@ public class Lesson {
 
     private int correctOptionIndex;
 
+    // 🎥 NEW DATABASE FIELD: Stores the target streaming educational video ID record row
+    private String videoUrl;
+
     public Lesson() {}
 
     public Lesson(String category, String title, String content, String interactiveTip,
-                  String quizQuestion, String[] quizOptions, int correctOptionIndex) {
+                  String quizQuestion, String[] quizOptions, int correctOptionIndex, String videoUrl) {
         this.category = category;
         this.title = title;
         this.content = content;
@@ -43,6 +46,7 @@ public class Lesson {
         this.quizQuestion = quizQuestion;
         this.setQuizOptions(quizOptions);
         this.correctOptionIndex = correctOptionIndex;
+        this.videoUrl = videoUrl;
     }
 
     public Long getId() { return id; }
@@ -53,6 +57,8 @@ public class Lesson {
     public String getInteractiveTip() { return interactiveTip; }
     public String getQuizQuestion() { return quizQuestion; }
     public int getCorrectOptionIndex() { return correctOptionIndex; }
+    public String getVideoUrl() { return videoUrl; }
+    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
 
     public String[] getQuizOptions() {
         if (this.quizOptionsRaw == null) return new String[0];

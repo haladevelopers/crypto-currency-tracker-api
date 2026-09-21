@@ -2,54 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindh Academy</title>
+    <title>Sindh Academy Matrix</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body { background:#0f172a; color:#fff; font-family:sans-serif; margin:0; padding-bottom:40px; }
-        header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:20px; text-align:center; position:relative; }
-        main { max-width:800px; margin:0 auto; padding:20px; }
-        .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:20px; display:flex; justify-content:space-between; }
-        .form-sec { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:20px; margin-bottom:20px; }
-        .form-row { display: flex; gap:10px; margin-bottom:10px; }
-        input, select, textarea { width:100%; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px; color:#fff; box-sizing:border-box; outline:none; }
-        .btn-sub { width:100%; background:#059669; color:#fff; font-weight:bold; padding:12px; border:none; border-radius:6px; cursor:pointer; }
-        .tabs { display:flex; gap:10px; margin-bottom:20px; overflow-x:auto; border-bottom:1px solid #334155; padding-bottom:10px; }
-        .tabs button { background:#1e293b; border:1px solid #334155; color:#fff; padding:6px 16px; border-radius:6px; cursor:pointer; }
+        header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:24px 20px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        main { max-width:1200px; margin:0 auto; padding:24px; box-sizing:border-box; }
+        .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; }
+        .form-sec { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; margin-bottom:28px; box-shadow:0 8px 16px rgba(0,0,0,0.2); }
+        .form-row { display: flex; gap:12px; margin-bottom:12px; }
+        input, select, textarea { width:100%; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:10px; color:#fff; box-sizing:border-box; outline:none; font-size:0.9rem; }
+        input:focus, select:focus, textarea:focus { border-color:#fbbf24; }
+        .btn-sub { width:100%; background:#059669; color:#fff; font-weight:bold; padding:14px; border:none; border-radius:6px; cursor:pointer; text-transform:uppercase; font-size:0.95rem; transition:background 0.2s; }
+        .btn-sub:hover { background:#10b981; }
+        .tabs { display:flex; gap:12px; margin-bottom:24px; overflow-x:auto; border-bottom:1px solid #334155; padding-bottom:12px; }
+        .tabs button { background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 20px; border-radius:6px; cursor:pointer; font-weight:bold; transition:all 0.2s; }
         .tabs button.active { background:#fbbf24; color:#0f172a; font-weight:bold; }
-        .grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); }
-        .card { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; }
-        .card-hd { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.8rem; }
-        .tag { color: #fbbf24; font-weight: bold; }
-        .btn-del { background:none; border:none; color:#64748b; cursor:pointer; font-weight:bold; }
+        .grid { display:grid; gap:28px; grid-template-columns:repeat(auto-fit, minmax(450px, 1fr)); }
+        .card { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition:border-color 0.2s; }
+        .card:hover { border-color:rgba(251,191,36,0.4); }
+        .card-hd { display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.8rem; }
+        .tag { color:#fbbf24; font-weight:bold; background:rgba(251,191,36,0.1); padding:4px 8px; border-radius:4px; }
+        .btn-del { background:none; border:none; color:#64748b; cursor:pointer; font-weight:bold; font-size:0.85rem; }
         .btn-del:hover { color:#ef4444; }
-        .tip { background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.2); color:#fde047; padding:10px; border-radius:6px; font-size:0.85rem; margin-top:10px; }
-        .qz { background:#0f172a; padding:12px; border-radius:6px; border:1px solid #475569; margin-top:10px; }
-        .qz-opt { width:100%; text-align:left; background:#1e293b; border:1px solid #475569; padding:8px; color:#fff; border-radius:4px; margin-top:6px; cursor:pointer; font-size:0.85rem; }
-        .qz-fb { font-size:0.85rem; font-weight:bold; margin-top:8px; padding:6px; border-radius:4px; display:none; }
-        .lang-btn { position:absolute; top:20px; right:20px; background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; }
+        .tip { background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.15); color:#fde047; padding:12px; border-radius:8px; font-size:0.85rem; margin:12px 0; }
+        .qz { background:#0f172a; padding:14px; border-radius:8px; border:1px solid #475569; margin-top:12px; }
+        .qz-opt { width:100%; text-align:left; background:#1e293b; border:1px solid #475569; padding:10px; color:#fff; border-radius:6px; margin-top:8px; cursor:pointer; font-size:0.85rem; }
+        .qz-opt:hover { border-color:#fbbf24; }
+        .qz-fb { font-size:0.85rem; font-weight:bold; margin-top:10px; padding:8px; border-radius:4px; display:none; }
+        .vid-box { position:relative; width:100%; padding-bottom:56.25%; margin-top:14px; border-radius:8px; overflow:hidden; border:1px solid #475569; }
+        .vid-box iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+        .nav-actions { display: flex; gap: 12px; justify-content: center; order: -1; margin-bottom: 4px; }
+        .lang-btn, .about-btn, .video-btn { background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 20px; border-radius:6px; font-weight:bold; cursor:pointer; text-decoration: none; font-size: 0.9rem; transition:all 0.2s; }
+        .lang-btn:hover, .about-btn:hover, .video-btn:hover { background:#fbbf24; color:#0f172a; }
         .rtl { direction:rtl; font-family:'Noto Naskh Arabic', sans-serif; }
+        .rtl .qz-opt { text-align:right; }
     </style>
 </head>
 <body>
 <header>
-    <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
+    <div class="nav-actions">
+        <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
+        <a href="/about.html" target="_blank" class="about-btn" id="aBtn">ℹ️ About Academy</a>
+        <a href="/videos.html" target="_blank" class="video-btn" id="vBtn">📺 Video Lessons</a>
+    </div>
     <h1 id="t1">HALA LITERACY ACADEMY</h1>
     <p id="t2">Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟</p>
 </header>
 <main id="mCont">
     <div class="stats">
-        <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24">Loading...</div></div>
-        <div id="lFree" style="background:#334155;padding:6px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
+        <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24;margin-top:4px">Loading...</div></div>
+        <div id="lFree" style="background:#334155;padding:6px 12px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
     </div>
     <div class="form-sec">
-        <h3 style="margin:0 0 10px 0;color:#fbbf24" id="lForm">➕ Add New Academy Lesson & Quiz</h3>
+        <h3 style="margin:0 0 14px 0;color:#fbbf24" id="lForm">➕ Add New Academy Lesson & Quiz</h3>
         <form onsubmit="createNewLesson(event)">
             <div class="form-row">
                 <select id="formCategory" style="flex:1"><option value="English">English</option><option value="AI">AI</option><option value="Earning">Earning</option></select>
                 <input type="text" id="formTitle" style="flex:2" required placeholder="Lesson Topic / Title">
             </div>
             <textarea id="formContent" required rows="2" placeholder="Lesson content details..." style="margin-bottom:10px"></textarea>
-            <input type="text" id="formTip" required placeholder="Interactive teacher tip..." style="margin-bottom:10px">
+            <div class="form-row">
+                <input type="text" id="formTip" style="flex:1" required placeholder="Interactive teacher tip...">
+                <input type="text" id="formVideo" style="flex:1" placeholder="YouTube Video Link or ID (Optional)">
+            </div>
             <input type="text" id="qzQ" required placeholder="Quiz Question..." style="margin-bottom:10px">
             <div class="form-row">
                 <input type="text" id="o0" required placeholder="Option 1">
@@ -69,14 +85,15 @@
     <div id="lessonsGrid" class="grid"></div>
 </main>
 <script>
+
     let curCat = ''; let curLang = 'EN';
     const dict = {
-        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct" },
-        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح" }
+        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct" },
+        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح" }
     };
     const trans = {
         "Mastering the Present Continuous Tense": "پريزنٽ ڪنٽينيوئس ٽينس تي عبور حاصل ڪريو",
-        "Use this tense for actions happening right now! Structure: Subject + am/is/are + Verb(ing). Example: 'I am learning code right now.'": "هي ٽينس انهن ڪمن لاءِ استعمال ٿيندو آهي جيڪي هن وقت ٿي رهيا هجن! بناوت: فاعل + am/is/are + فيعل(ing). مثال: 'مان هن وقت ڪوڊ سکي رهيويان.'",
+        "Use this tense for actions happening right now! Structure: Subject + am/is/are + Verb(ing). Example: 'I am learning code right now.'": "هي ٽينس انهن ڪمن لاءِ استعمال ٿيندو آهي جيڪي هن وقت ٿي رهيا هجن! بناوت: فاعل + am/is/are + فيعل(ing). مثال: 'مان هن وقت ڪوڊ سکي رهيو آهيان.'",
         "Tip: Look around your room and say out loud what your family members are doing!": "ٽپ: پنهنجي ڪمري جي چوڌاري ڏسو ۽ آواز سان چئو ته گهر وارا ڇا ڪري رهيا آهن!",
         "Identify the correct Present Continuous statement below:": "هيٺ ڏنل جملن مان صحيح جملو سڃاڻو:",
         "He runs to school yesterday.": "هو ڪلهه اسڪول ڊوڙي ٿو.",
@@ -90,43 +107,68 @@
         "Username, Password, and Code": "يوزرنام، پاسورڊ، ۽ ڪوڊ",
         "Laptop, Internet, and Browser": "ليپ ٽاپ، انٽرنيٽ، ۽ برائوزر"
     };
+
     function getT(txt) { return (curLang === 'SD' && trans[txt]) ? trans[txt] : txt; }
+
+    function extVid(url) {
+        if(!url) return "";
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[match.length-1].length === 11) ? match[match.length-1] : url;
+    }
+
     fetch('/api/convert?usd=1').then(res=>res.json()).then(d=>{document.getElementById('exchangeStatus').innerText=`$1.00 USD = ${d.convertedPkr} PKR`;});
+
     function loadLessons(cat, btn) {
         curCat = cat; if(btn){document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');}
         fetch(`/api/lessons?category=${encodeURIComponent(cat)}`).then(res=>res.json()).then(data=>{
             const g = document.getElementById('lessonsGrid'); g.innerHTML = ''; const d = dict[curLang];
             data.forEach(l=>{
                 let opts = ''; l.quizOptions.forEach((o, i) => { opts += `<button onclick="checkAnswer(${l.id}, ${i}, ${l.correctOptionIndex})" class="qz-opt" id="opt-${l.id}-${i}">${getT(o)}</button>`; });
-                g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">${d.dBtn}</button></div><h3>${getT(l.title)}</h3><p style="color:#cbd5e1;font-size:0.9rem">${getT(l.content)}</p><div class="tip">💡 ${getT(l.interactiveTip)}</div><div class="qz"><strong>${d.qHead}</strong><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px">${getT(l.quizQuestion)}</div><div>${opts}</div><div class="qz-fb" id="fb-${l.id}"></div></div></div>`;
+
+                let vidHtml = "";
+                if(l.videoUrl && l.videoUrl.trim() !== "") {
+                    const vidId = extVid(l.videoUrl);
+                    vidHtml = `<div class="vid-box"><iframe src="https://youtube.com{vidId}" allowfullscreen></iframe></div>`;
+                }
+
+                g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">${d.dBtn}</button></div><h3>${getT(l.title)}</h3><p style="color:#cbd5e1;font-size:0.9rem;line-height:1.5">${getT(l.content)}</p>${vidHtml}<div class="tip">💡 ${getT(l.interactiveTip)}</div><div class="qz"><strong>${d.qHead}</strong><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;margin-bottom:6px">${getT(l.quizQuestion)}</div><div>${opts}</div><div class="qz-fb" id="fb-${l.id}"></div></div></div>`;
             });
         });
     }
     function toggleLang() {
         curLang = (curLang === 'EN') ? 'SD' : 'EN'; const d = dict[curLang];
-        document.getElementById('lBtn').innerText = d.lBtn;
-        document.getElementById('t1').innerHTML = d.t1;
-        document.getElementById('t2').innerText = d.t2;
-        document.getElementById('lCurr').innerText = d.lCurr;
-        document.getElementById('lFree').innerText = d.lFree;
-        document.getElementById('lForm').innerText = d.lForm;
-        document.getElementById('lPub').innerText = d.lPub;
-        document.getElementById('c0').innerText = d.c0;
-        document.getElementById('c1').innerText = d.c1;
-        document.getElementById('c2').innerText = d.c2;
-        if(curLang === 'SD') {
-            document.body.classList.add('rtl');
-            document.getElementById('mCont').classList.add('rtl');
-            document.getElementById('tRow').style.flexDirection = "row-reverse";
-        } else {
-            document.body.classList.remove('rtl');
-            document.getElementById('mCont').classList.remove('rtl');
-            document.getElementById('tRow').style.flexDirection = "row";
-        }
+        document.getElementById('lBtn').innerText = d.lBtn; document.getElementById('t1').innerHTML = d.t1;
+        document.getElementById('t2').innerText = d.t2; document.getElementById('lCurr').innerText = d.lCurr;
+        document.getElementById('lFree').innerText = d.lFree; document.getElementById('lForm').innerText = d.lForm;
+        document.getElementById('lPub').innerText = d.lPub; document.getElementById('c0').innerText = d.c0;
+        document.getElementById('c1').innerText = d.c1; document.getElementById('c2').innerText = d.c2;
+        document.getElementById('aBtn').innerText = d.aBtn; document.getElementById('vBtn').innerText = d.vBtn;
+        if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); document.getElementById('tRow').style.flexDirection = "row-reverse"; }
+        else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); document.getElementById('tRow').style.flexDirection = "row"; }
         loadLessons(curCat, document.querySelector('.tabs button.active'));
+    }
+    function checkAnswer(id, ch, corr) {
+        const fb = document.getElementById(`fb-${id}`); fb.style.display = "block"; const d = dict[curLang];
+        for(let i=0; i<3; i++) { const b = document.getElementById(`opt-${id}-${i}`); if(b) b.style.borderColor="#475569"; }
+        const sel = document.getElementById(`opt-${id}-${ch}`);
+        if(ch === corr) { fb.style.background="rgba(16,185,129,0.15)"; fb.style.color="#34d399"; fb.innerText=d.cMsg; if(sel) sel.style.borderColor="#10b981"; }
+        else { fb.style.background="rgba(239,68,68,0.15)"; fb.style.color="#f87171"; fb.innerText=d.iMsg; if(sel) sel.style.borderColor="#ef4444"; }
+    }
+    function createNewLesson(e) {
+        e.preventDefault();
+        const p = `category=${encodeURIComponent(document.getElementById('formCategory').value)}&title=${encodeURIComponent(document.getElementById('formTitle').value)}&content=${encodeURIComponent(document.getElementById('formContent').value)}&tip=${encodeURIComponent(document.getElementById('formTip').value)}&quizQuestion=${encodeURIComponent(document.getElementById('qzQ').value)}&opt0=${encodeURIComponent(document.getElementById('o0').value)}&opt1=${encodeURIComponent(document.getElementById('o1').value)}&opt2=${encodeURIComponent(document.getElementById('o2').value)}&correctIdx=${document.getElementById('corrIdx').value}&videoUrl=${encodeURIComponent(document.getElementById('formVideo').value)}`;
+        fetch(`/api/lessons/add?${p}`).then(res=>res.json()).then(()=>{
+            document.getElementById('formTitle').value=''; document.getElementById('formContent').value=''; document.getElementById('formTip').value=''; document.getElementById('qzQ').value=''; document.getElementById('o0').value=''; document.getElementById('o1').value=''; document.getElementById('o2').value=''; document.getElementById('formVideo').value='';
+            loadLessons(curCat, document.querySelector('.tabs button.active'));
+        });
+    }
+    function deleteLesson(id) {
+        if(prompt("🔐 Enter Admin Code:") === "12345") {
+            fetch(`/api/lessons/delete?id=${id}`).then(res=>res.json()).then(()=>{ loadLessons(curCat, document.querySelector('.tabs button.active')); alert("🗑️ Removed."); });
+        } else { alert("❌ Access Denied!"); }
     }
     loadLessons('');
 </script>
 </body>
 </html>
-
