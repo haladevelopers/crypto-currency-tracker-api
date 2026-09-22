@@ -37,6 +37,16 @@
         .lang-btn:hover, .about-btn:hover, .video-btn:hover { background:#fbbf24; color:#0f172a; }
         .rtl { direction:rtl; font-family:'Noto Naskh Arabic', sans-serif; }
         .rtl .qz-opt { text-align:right; }
+
+        /* 📣 CINEMATIC SMOOTH-SCROLLING ANNOUNCEMENT TICKER STYLES */
+        .ticker-wrapper { background: #1e293b; border: 1px solid #dc2626; border-radius: 8px; margin-bottom: 24px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(220,38,38,0.15); width: 100%; }
+        .ticker-title { background: #dc2626; color: white; padding: 12px 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.3); }
+        .ticker-marquee { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
+        .ticker-text { display: inline-block; padding-left: 100%; font-weight: bold; color: #fbbf24; font-size: 0.95rem; animation: marquee-scroll 25s linear infinite; }
+        @keyframes marquee-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .rtl .ticker-text { animation: marquee-scroll-rtl 25s linear infinite; padding-left: 0; padding-right: 100%; }
+        @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+
     </style>
 </head>
 <body>
@@ -45,11 +55,27 @@
         <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
         <a href="/about.html" target="_blank" class="about-btn" id="aBtn">ℹ️ About Academy</a>
         <a href="/videos.html" target="_blank" class="video-btn" id="vBtn">📺 Video Lessons</a>
+        <a href="/live.html" target="_blank" class="video-btn" id="liveBtn">📡 Live Lectures</a>
+        <a href="/developer.html" target="_blank" class="video-btn" id="devBtn">Developer Profile</a>
+
+
+
+
     </div>
     <h1 id="t1">HALA LITERACY ACADEMY</h1>
     <p id="t2">Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟</p>
 </header>
 <main id="mCont">
+
+    <!-- 🌟 AUTOMATED SCROLLING BULLETIN MARQUEE TICKER BOARD -->
+    <div class="ticker-wrapper" id="tickerBlock">
+        <div class="ticker-title" id="lblAnnounce">Announcements</div>
+        <div class="ticker-marquee">
+            <!-- You can manually edit this text string anytime right here to update your students instantly! -->
+            <div class="ticker-text" id="lblAnnounceText">📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on "Live Lectures" at the top header to join our virtual classroom room instantly!</div>
+        </div>
+    </div>
+
     <div class="stats">
         <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24;margin-top:4px">Loading...</div></div>
         <div id="lFree" style="background:#334155;padding:6px 12px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
@@ -88,8 +114,16 @@
 
     let curCat = ''; let curLang = 'EN';
     const dict = {
-        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct" },
-        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح" }
+        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct" , announceHead:"Announcements", announceTxt:"📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on \"Live Lectures\" at the top header to join our virtual classroom room instantly!" , liveBtn:"📡 Live Lectures"
+            , liveBtn:"📡 Live Lectures" , devBtn:"👨‍💻 Developer Profile"
+
+
+        },
+        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح"  , announceHead:"اشتهارن جو بورڊ", announceTxt:"📢 هالا اڪيڊمي ۾ ڀليڪار! اڄ رات 9:00 وڳي انگريزي جو نئون لائيو زوم ڪلاس شروع ٿيندو. ڪلاس ۾ شامل ٿيڻ لاءِ مٿي ڏنل 'لائيو ليڪچرز' تي ڪلڪ ڪريو!"
+            , liveBtn:"📡 لائيو ليڪچرز" , liveBtn:"📡 لائيو ليڪچرز" , devBtn:"👨‍💻 ڊولپر پروفائل"
+
+
+        }
     };
     const trans = {
         "Mastering the Present Continuous Tense": "پريزنٽ ڪنٽينيوئس ٽينس تي عبور حاصل ڪريو",
@@ -144,9 +178,18 @@
         document.getElementById('lPub').innerText = d.lPub; document.getElementById('c0').innerText = d.c0;
         document.getElementById('c1').innerText = d.c1; document.getElementById('c2').innerText = d.c2;
         document.getElementById('aBtn').innerText = d.aBtn; document.getElementById('vBtn').innerText = d.vBtn;
+        document.getElementById('liveBtn').innerText = d.liveBtn;
+        document.getElementById('devBtn').innerText = d.devBtn;
+
+
         if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); document.getElementById('tRow').style.flexDirection = "row-reverse"; }
+
         else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); document.getElementById('tRow').style.flexDirection = "row"; }
-        loadLessons(curCat, document.querySelector('.tabs button.active'));
+        loadLessons(curCat, document.querySelector('.tabs button.active')); document.getElementById('lblAnnounce').innerText = d.announceHead;
+        document.getElementById('lblAnnounceText').innerText = d.announceTxt;
+        if(curLang === 'SD') { document.getElementById('tickerBlock').classList.add('rtl'); }
+        else { document.getElementById('tickerBlock').classList.remove('rtl'); }
+
     }
     function checkAnswer(id, ch, corr) {
         const fb = document.getElementById(`fb-${id}`); fb.style.display = "block"; const d = dict[curLang];

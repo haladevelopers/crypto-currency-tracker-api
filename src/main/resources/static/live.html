@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📡 Live Lectures Channel - Hala Academy</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body { background: #0f172a; color: #fff; font-family: sans-serif; margin: 0; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #fbbf24; font-size: 2.2rem; margin: 0 0 10px 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 30px; }
+        .room-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .room-status { display: inline-block; background: #dc2626; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; width: fit-content; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
+        .room-status.online { background: #059669; }
+        h3 { margin: 0 0 10px 0; color: #f59e0b; font-size: 1.3rem; }
+        p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px; }
+        .connect-btn { text-align: center; display: block; font-weight: bold; text-decoration: none; padding: 12px; border-radius: 6px; font-size: 0.95rem; text-transform: uppercase; margin-top: auto; }
+        .btn-meet { background: #2563eb; color: #fff; } .btn-meet:hover { background: #1d4ed8; }
+        .btn-zoom { background: #fb923c; color: #0f172a; } .btn-zoom:hover { background: #f97316; }
+        .btn-wa { background: #16a34a; color: #fff; } .btn-wa:hover { background: #15803d; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📡 VIRTUAL CLASSROOMS & LIVE LECTURES</h1>
+        <p style="color: #94a3b8; font-size: 1.1rem; margin-top: 5px;">Connect natively with senior professors and mentors via unified virtual links</p>
+    </header>
+
+    <div class="grid">
+        <!-- Room 1: Google Meet -->
+        <div class="room-card">
+            <div>
+                <div class="room-status online">🟢 Live Now</div>
+                <h3>🗣️ English Grammar & Sound Drills</h3>
+                <p>Delivered by Senior Linguistics Expert. Live conversational sound reviews and real-time pronunciation exercises targeting silent letters.</p>
+            </div>
+            <a href="https://google.com" target="_blank" class="connect-btn btn-meet">🚀 Enter Google Meet Room</a>
+        </div>
+
+        <!-- Room 2: Zoom Meeting -->
+        <div class="room-card">
+            <div>
+                <div class="room-status">⏰ Tonight 9:00 PM</div>
+                <h3>🤖 Advanced Prompt Engineering Masterclass</h3>
+                <p>Live syntax breakdown with senior industry mentors detailing vector parameters, expert role triggers, and custom data context structures.</p>
+            </div>
+            <a href="https://zoom.us" target="_blank" class="connect-btn btn-zoom">🔑 Join Zoom Lecture</a>
+        </div>
+
+        <!-- Room 3: WhatsApp Group -->
+        <div class="room-card">
+            <div>
+                <div class="room-status online">🟢 Active Board</div>
+                <h3>📱 Student Mentorship & Assignment Feed</h3>
+                <p>Our official collaborative community network directory. Submit your digital earning screenshots, ask text queries, and coordinate directly with senior advisors.</p>
+            </div>
+            <a href="https://whatsapp.com" target="_blank" class="connect-btn btn-wa">💬 Join Community WhatsApp</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
