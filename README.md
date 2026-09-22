@@ -1,4 +1,4 @@
-# 🎓 Full-Stack Java Spring Boot Web Portal & Multi-Page Data Engine
+# 🎓 Full-Stack Java Spring Boot Web Portal & Database-Driven Bilingual Engine
 
 An autonomous, database-persistent, interactive e-learning ecosystem, multi-page web cluster, and concurrent multi-currency conversion REST API microservice. Engineered under the corporate brand **haladevelopers** specifically to provide high-impact, localized digital literacy and AI skill models for the youth of Sindh, Pakistan.
 
@@ -16,12 +16,11 @@ An autonomous, database-persistent, interactive e-learning ecosystem, multi-page
 
 ## 🛠️ Core Architectural Capabilities & Tech Stack
 
+- **Automated Database-Driven Translation Engine:** Migrated the localized UI from static code lookup tables into a dynamic side-by-side database schema architecture. The platform stores English and Sindhi columns (`titleSd`, `contentSd`, etc.) concurrently inside persistent hard-drive relational storage tiers, enabling seamless multi-language dashboard rendering with zero source code changes required forever.
 - **Server-Side Data Validation Gateways:** Integrated `spring-boot-starter-validation` dependencies inside the persistence model layer. Enforced strict programmatic `@NotBlank` and `@Size(min=3, max=5000)` constraint bounds across incoming JSON payload parameters, automatically neutralizing broken strings or empty payloads before disk serialization.
-- **Multi-Page Web Cluster Architecture:** Implemented modular Spring Boot MVC routing layers to serve independent frontend templates, segregating the core learning matrix dashboard from dedicated portal sections like the multi-column **About Hub** and the cinematic **Video Showroom**.
+- **Multi-Page Web Cluster Architecture:** Implemented modular Spring Boot MVC routing layers to serve independent frontend templates, segregating the core learning matrix dashboard from dedicated portal sections like the multi-column **About Hub**, the cinematic **Video Showroom**, and virtual **Live Lecture classrooms**.
 - **Cinematic Media Streaming Integration:** Engineered client-side matching algorithms capable of extracting unique 11-character YouTube video ID vectors dynamically on-the-fly, embedding responsive 16:9 cinematic video players natively inside individual lesson modules.
 - **Widescreen Multi-Column Fluid Grid:** Modernized the complete application layout to an ultra-wide **1200px desktop grid matrix**, upgrading content card components into responsive double-row flex tiers that remain perfectly scale-proof across all screen resolutions and zoom tracks.
-- **Relational Data Persistence Layer:** Integrated **Spring Data JPA & Hibernate** frameworks wired directly to an embedded relational databank engine (**H2/MySQL**) running persistent file state systems with custom expanded column definition models to accept unlimited text guides.
-- **Bi-Directional Multilingual Toggle Engine:** Developed a high-efficiency JavaScript translation dictionary module capable of switching all fixed UI labels, multi-page navigation links, forms, and instructional contents between English and localized **Sindhi Arabic typography** with an adaptive **Right-to-Left (RTL)** text alignment format.
 
 ---
 
@@ -31,7 +30,6 @@ An autonomous, database-persistent, interactive e-learning ecosystem, multi-page
 - **`GET /about.html`** - Standalone multi-column presentation detailing project roadmaps in parallel dual languages.
 - **`GET /videos.html`** - Dedicated 3-column media showroom linking directly to the official **[@aiforkinder](https://youtube.com)** YouTube streaming network.
 - **`GET /live.html`** - Dynamic virtual classroom connection matrix tracking live Zoom/Google Meet links.
-- **`GET /api/lessons`** - Dynamic retrieval stream of curriculum blocks (Supports filtering via `?category=English|AI|Earning`).
-- **`GET /api/lessons/add`** - Secured parameter injection route to validate and store custom lesson modules and streaming video paths natively to database storage tables.
-- **`GET /api/lessons/delete`** - Authentication gate validation endpoint to purge specific records by unique primary keys.
+- **`GET /api/lessons`** - Dynamic retrieval stream of curriculum blocks (Serves concurrent English and Sindhi data fields).
+- **`GET /api/lessons/add`** - Secured parameter injection route to validate and store side-by-side English & Sindhi text strings natively to database storage tables.
 - **`GET /api/convert`** - Automated currency conversion matrix tracking USD, EUR, INR, and PKR parameters concurrently.
