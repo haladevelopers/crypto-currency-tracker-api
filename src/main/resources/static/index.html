@@ -6,7 +6,7 @@
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         body { background:#0f172a; color:#fff; font-family:sans-serif; margin:0; padding-bottom:40px; }
-        header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:24px 20px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:24px 20px; text-align:center; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; gap: 12px; }
         main { max-width:1200px; margin:0 auto; padding:24px; box-sizing:border-box; }
         .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; }
         .form-sec { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; margin-bottom:28px; box-shadow:0 8px 16px rgba(0,0,0,0.2); }
@@ -15,9 +15,19 @@
         input:focus, select:focus, textarea:focus { border-color:#fbbf24; }
         .btn-sub { width:100%; background:#059669; color:#fff; font-weight:bold; padding:14px; border:none; border-radius:6px; cursor:pointer; text-transform:uppercase; font-size:0.95rem; transition:background 0.2s; }
         .btn-sub:hover { background:#10b981; }
+        .ticker-wrapper { background: #1e293b; border: 1px solid #dc2626; border-radius: 8px; margin-bottom: 24px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(220,38,38,0.15); width: 100%; }
+        .ticker-title { background: #dc2626; color: white; padding: 12px 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.3); }
+        .ticker-marquee { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
+        .ticker-text { display: inline-block; padding-left: 100%; font-weight: bold; color: #fbbf24; font-size: 0.95rem; animation: marquee-scroll 25s linear infinite; }
+        @keyframes marquee-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .rtl .ticker-text { animation: marquee-scroll-rtl 25s linear infinite; padding-left: 0; padding-right: 100%; }
+        @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        .search-container { margin-bottom: 24px; width: 100%; }
+        .search-input { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; color: #fff; font-size: 1rem; width: 100%; box-sizing: border-box; outline: none; }
+        .search-input:focus { border-color: #fbbf24; background: #0f172a; }
         .tabs { display:flex; gap:12px; margin-bottom:24px; overflow-x:auto; border-bottom:1px solid #334155; padding-bottom:12px; }
         .tabs button { background:#1e293b; border:1px solid #334155; color:#fff; padding:8px 20px; border-radius:6px; cursor:pointer; font-weight:bold; transition:all 0.2s; }
-        .tabs button.active { background:#fbbf24; color:#0f172a; font-weight:bold; }
+        .tabs button.active { background:#fbbf24; color:#0f172a; }
         .grid { display:grid; gap:28px; grid-template-columns:repeat(auto-fit, minmax(450px, 1fr)); }
         .card { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition:border-color 0.2s; }
         .card:hover { border-color:rgba(251,191,36,0.4); }
@@ -32,48 +42,35 @@
         .qz-fb { font-size:0.85rem; font-weight:bold; margin-top:10px; padding:8px; border-radius:4px; display:none; }
         .vid-box { position:relative; width:100%; padding-bottom:56.25%; margin-top:14px; border-radius:8px; overflow:hidden; border:1px solid #475569; }
         .vid-box iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
-        .nav-actions { display: flex; gap: 12px; justify-content: center; order: -1; margin-bottom: 4px; }
-        .lang-btn, .about-btn, .video-btn { background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 20px; border-radius:6px; font-weight:bold; cursor:pointer; text-decoration: none; font-size: 0.9rem; transition:all 0.2s; }
-        .lang-btn:hover, .about-btn:hover, .video-btn:hover { background:#fbbf24; color:#0f172a; }
+        .nav-actions { display: flex; gap: 10px; justify-content: center; order: -1; margin-bottom: 4px; flex-wrap: wrap; }
+        .lang-btn, .about-btn, .video-btn, .live-btn, .dev-btn { background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; text-decoration: none; font-size: 0.85rem; transition:all 0.2s; white-space: nowrap; }
+        .lang-btn:hover, .about-btn:hover, .video-btn:hover, .live-btn:hover, .dev-btn:hover { background:#fbbf24; color:#0f172a; }
         .rtl { direction:rtl; font-family:'Noto Naskh Arabic', sans-serif; }
         .rtl .qz-opt { text-align:right; }
-
-        /* 📣 CINEMATIC SMOOTH-SCROLLING ANNOUNCEMENT TICKER STYLES */
-        .ticker-wrapper { background: #1e293b; border: 1px solid #dc2626; border-radius: 8px; margin-bottom: 24px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(220,38,38,0.15); width: 100%; }
-        .ticker-title { background: #dc2626; color: white; padding: 12px 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.3); }
-        .ticker-marquee { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
-        .ticker-text { display: inline-block; padding-left: 100%; font-weight: bold; color: #fbbf24; font-size: 0.95rem; animation: marquee-scroll 25s linear infinite; }
-        @keyframes marquee-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
         .rtl .ticker-text { animation: marquee-scroll-rtl 25s linear infinite; padding-left: 0; padding-right: 100%; }
         @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
-
     </style>
 </head>
+
 <body>
 <header>
     <div class="nav-actions">
         <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
         <a href="/about.html" target="_blank" class="about-btn" id="aBtn">ℹ️ About Academy</a>
         <a href="/videos.html" target="_blank" class="video-btn" id="vBtn">📺 Video Lessons</a>
-        <a href="/live.html" target="_blank" class="video-btn" id="liveBtn">📡 Live Lectures</a>
-        <a href="https://haladevelopers.github.io/Portfolio/" target="_blank" class="video-btn" id="devBtn">Developer Profile</a>
-
-
+        <a href="/live.html" target="_blank" class="live-btn" id="liveBtn">📡 Live Lectures</a>
+        <a href="https://github.io" target="_blank" class="dev-btn" id="devBtn">👨‍💻 Developer Profile</a>
     </div>
     <h1 id="t1">HALA LITERACY ACADEMY</h1>
     <p id="t2">Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟</p>
 </header>
 <main id="mCont">
-
-    <!-- 🌟 AUTOMATED SCROLLING BULLETIN MARQUEE TICKER BOARD -->
     <div class="ticker-wrapper" id="tickerBlock">
         <div class="ticker-title" id="lblAnnounce">Announcements</div>
         <div class="ticker-marquee">
-            <!-- You can manually edit this text string anytime right here to update your students instantly! -->
             <div class="ticker-text" id="lblAnnounceText">📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on "Live Lectures" at the top header to join our virtual classroom room instantly!</div>
         </div>
     </div>
-
     <div class="stats">
         <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24;margin-top:4px">Loading...</div></div>
         <div id="lFree" style="background:#334155;padding:6px 12px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
@@ -83,22 +80,38 @@
         <form onsubmit="createNewLesson(event)">
             <div class="form-row">
                 <select id="formCategory" style="flex:1"><option value="English">English</option><option value="AI">AI</option><option value="Earning">Earning</option></select>
-                <input type="text" id="formTitle" style="flex:2" required placeholder="Lesson Topic / Title">
+                <input type="text" id="formTitle" style="flex:2" required placeholder="Lesson Topic / Title (English)">
+                <input type="text" id="formTitleSd" style="flex:2; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="عنوان / موضوع (سنڌي)">
             </div>
-            <textarea id="formContent" required rows="2" placeholder="Lesson content details..." style="margin-bottom:10px"></textarea>
             <div class="form-row">
-                <input type="text" id="formTip" style="flex:1" required placeholder="Interactive teacher tip...">
+                <textarea id="formContent" required rows="2" placeholder="Lesson content details (English)..." style="flex:1"></textarea>
+                <textarea id="formContentSd" rows="2" placeholder="سبق جا تفصيل (سنڌي)..." style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;"></textarea>
+            </div>
+            <div class="form-row">
+                <input type="text" id="formTip" style="flex:1" required placeholder="Interactive teacher tip (English)...">
+                <input type="text" id="formTipSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="استاد جي خاص ٽپ (سنڌي)...">
+            </div>
+            <div class="form-row">
                 <input type="text" id="formVideo" style="flex:1" placeholder="YouTube Video Link or ID (Optional)">
+                <input type="text" id="qzQ" style="flex:1" required placeholder="Quiz Question (English)...">
+                <input type="text" id="qzQSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="ڪوئز جو سوال (سنڌي)...">
             </div>
-            <input type="text" id="qzQ" required placeholder="Quiz Question..." style="margin-bottom:10px">
             <div class="form-row">
-                <input type="text" id="o0" required placeholder="Option 1">
-                <input type="text" id="o1" required placeholder="Option 2">
-                <input type="text" id="o2" required placeholder="Option 3">
+                <input type="text" id="o0" required placeholder="Option 1 (English)">
+                <input type="text" id="o1" required placeholder="Option 2 (English)">
+                <input type="text" id="o2" required placeholder="Option 3 (English)">
+            </div>
+            <div class="form-row" style="direction: rtl;">
+                <input type="text" id="o0Sd" placeholder="آپشن 1 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
+                <input type="text" id="o1Sd" placeholder="آپشن 2 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
+                <input type="text" id="o2Sd" placeholder="آپشن 3 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
             </div>
             <select id="corrIdx" style="margin-bottom:15px"><option value="0" id="c0">Option 1 Correct</option><option value="1" id="c1">Option 2 Correct</option><option value="2" id="c2">Option 3 Correct</option></select>
-            <button type="submit" class="btn-sub" id="lPub">🚀 Publish Full Module</button>
+            <button type="submit" class="btn-sub" id="lPub">🚀 Publish Full Bilingual Module</button>
         </form>
+    </div>
+    <div class="search-container">
+        <input type="text" id="searchBar" onkeyup="filterLessonsByKeyword()" class="search-input" placeholder="🔍 Search courses by keyword or topic summary...">
     </div>
     <div class="tabs" id="tRow">
         <button id="all-btn" onclick="loadLessons('', this)" class="active">All Courses</button>
@@ -110,37 +123,29 @@
 </main>
 <script>
 
-    let curCat = ''; let curLang = 'EN';
+    let curCat = ''; let curLang = 'EN'; let localLessonsCache = [];
     const dict = {
-        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct" , announceHead:"Announcements", announceTxt:"📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on \"Live Lectures\" at the top header to join our virtual classroom room instantly!" , liveBtn:"📡 Live Lectures"
-            , liveBtn:"📡 Live Lectures" , devBtn:"👨‍💻 Developer Profile"
+        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", liveBtn:"📡 Live Lectures", devBtn:"👨‍💻 Developer Profile", announceHead:"Announcements", announceTxt:"📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on \"Live Lectures\" at the top header to join our virtual classroom room instantly!", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!", dBtn:"✕ Delete", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct", searchPlace:"🔍 Search courses by keyword or topic summary..." },
+        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", liveBtn:"📡 لائيو ليڪچرز", devBtn:"👨‍💻 ڊولپر پروفائل", announceHead:"اشتهارن جو بورڊ", announceTxt:"📢 هالا اڪيڊمي ۾ ڀليڪار! اڄ رات 9:00 وڳي انگريزي جو نئون لائيو زوم ڪلاس شروع ٿيندو. ڪلاس ۾ شامل ٿيڻ لاءِ مٿي ڏنل 'لائيو ليڪچرز' تي ڪلڪ ڪريو!", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح", searchPlace:"🔍 اهم لفظن يا موضوع ذريعي ڪورس ڳوليو..." }
+    };
 
-
-        },
-        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!", dBtn:"✕ ختم ڪريو", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح"  , announceHead:"اشتهارن جو بورڊ", announceTxt:"📢 هالا اڪيڊمي ۾ ڀليڪار! اڄ رات 9:00 وڳي انگريزي جو نئون لائيو زوم ڪلاس شروع ٿيندو. ڪلاس ۾ شامل ٿيڻ لاءِ مٿي ڏنل 'لائيو ليڪچرز' تي ڪلڪ ڪريو!"
-            , liveBtn:"📡 لائيو ليڪچرز" , liveBtn:"📡 لائيو ليڪچرز" , devBtn:"👨‍💻 ڊولپر پروفائل"
-
-
+    function getT(l, property) {
+        if (curLang === 'SD') {
+            if (property === 'title') return l.titleSd ? l.titleSd : l.title;
+            if (property === 'content') return l.contentSd ? l.contentSd : l.content;
+            if (property === 'tip') return l.interactiveTipSd ? l.interactiveTipSd : l.interactiveTip;
+            if (property === 'question') return l.quizQuestionSd ? l.quizQuestionSd : l.quizQuestion;
         }
-    };
-    const trans = {
-        "Mastering the Present Continuous Tense": "پريزنٽ ڪنٽينيوئس ٽينس تي عبور حاصل ڪريو",
-        "Use this tense for actions happening right now! Structure: Subject + am/is/are + Verb(ing). Example: 'I am learning code right now.'": "هي ٽينس انهن ڪمن لاءِ استعمال ٿيندو آهي جيڪي هن وقت ٿي رهيا هجن! بناوت: فاعل + am/is/are + فيعل(ing). مثال: 'مان هن وقت ڪوڊ سکي رهيو آهيان.'",
-        "Tip: Look around your room and say out loud what your family members are doing!": "ٽپ: پنهنجي ڪمري جي چوڌاري ڏسو ۽ آواز سان چئو ته گهر وارا ڇا ڪري رهيا آهن!",
-        "Identify the correct Present Continuous statement below:": "هيٺ ڏنل جملن مان صحيح جملو سڃاڻو:",
-        "He runs to school yesterday.": "هو ڪلهه اسڪول ڊوڙي ٿو.",
-        "She is speaking English beautifully.": "هوءَ تمام خوبصورتي سان انگريزي ڳالهائي رهي آهي.",
-        "They will study tomorrow.": "اهي سڀاڻي پڙهندا.",
-        "Introduction to Prompt Engineering": "پرامپٽ انجنيئرنگ جو تعارف",
-        "AI outputs are only as good as your inputs. Always give the AI a Role, a Task, and a Context. Example: 'Act as a professional English tutor...'": "اي آئي جو جواب توهان جي سوال تي مدار رکي ٿو. هميشه اي آئي کي ڪردار ۽ ڪم ڏيو.",
-        "Tip: Try starting your next query with 'Act as an expert software tester'!": "ٽپ: پنهنجو ايندڙ سوال 'Act as an expert software tester' سان شروع ڪري ڏسو!",
-        "What are the three essential components of a perfect foundational AI prompt?": "اي آئي پرامپٽ جا ٽي اهم حصا ڪهڙا آهن؟",
-        "Role, Task, and Context": "ڪردار، ڪم، ۽ پس منظر",
-        "Username, Password, and Code": "يوزرنام، پاسورڊ، ۽ ڪوڊ",
-        "Laptop, Internet, and Browser": "ليپ ٽاپ، انٽرنيٽ، ۽ برائوزر"
-    };
+        return l[property] || '';
+    }
 
-    function getT(txt) { return (curLang === 'SD' && trans[txt]) ? trans[txt] : txt; }
+    function getOptionsT(l, index) {
+        if (curLang === 'SD') {
+            const sdOpts = l.quizOptionsSd;
+            if (sdOpts && sdOpts[index] && sdOpts[index].trim() !== "") return sdOpts[index];
+        }
+        return l.quizOptions[index];
+    }
 
     function extVid(url) {
         if(!url) return "";
@@ -153,20 +158,27 @@
 
     function loadLessons(cat, btn) {
         curCat = cat; if(btn){document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');}
-        fetch(`/api/lessons?category=${encodeURIComponent(cat)}`).then(res=>res.json()).then(data=>{
-            const g = document.getElementById('lessonsGrid'); g.innerHTML = ''; const d = dict[curLang];
-            data.forEach(l=>{
-                let opts = ''; l.quizOptions.forEach((o, i) => { opts += `<button onclick="checkAnswer(${l.id}, ${i}, ${l.correctOptionIndex})" class="qz-opt" id="opt-${l.id}-${i}">${getT(o)}</button>`; });
+        fetch(`/api/lessons?category=${encodeURIComponent(cat)}`).then(res=>res.json()).then(data=>{ localLessonsCache = data; renderLessonsGrid(data); });
+    }
 
-                let vidHtml = "";
-                if(l.videoUrl && l.videoUrl.trim() !== "") {
-                    const vidId = extVid(l.videoUrl);
-                    vidHtml = `<div class="vid-box"><iframe src="https://youtube.com{vidId}" allowfullscreen></iframe></div>`;
-                }
-
-                g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">${d.dBtn}</button></div><h3>${getT(l.title)}</h3><p style="color:#cbd5e1;font-size:0.9rem;line-height:1.5">${getT(l.content)}</p>${vidHtml}<div class="tip">💡 ${getT(l.interactiveTip)}</div><div class="qz"><strong>${d.qHead}</strong><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;margin-bottom:6px">${getT(l.quizQuestion)}</div><div>${opts}</div><div class="qz-fb" id="fb-${l.id}"></div></div></div>`;
-            });
+    function renderLessonsGrid(data) {
+        const g = document.getElementById('lessonsGrid'); g.innerHTML = ''; const d = dict[curLang];
+        data.forEach(l=>{
+            let opts = '';
+            for(let i=0; i<3; i++) {
+                opts += `<button onclick="checkAnswer(${l.id}, ${i}, ${l.correctOptionIndex})" class="qz-opt" id="opt-${l.id}-${i}">${getOptionsT(l, i)}</button>`;
+            }
+            let vidHtml = ""; if(l.videoUrl && l.videoUrl.trim() !== "") { const vidId = extVid(l.videoUrl); vidHtml = `<div class="vid-box"><iframe src="https://youtube.com{vidId}" allowfullscreen></iframe></div>`; }
+            g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">${l.category}</span><button onclick="deleteLesson(${l.id})" class="btn-del">${d.dBtn}</button></div><h3>${getT(l, 'title')}</h3><p style="color:#cbd5e1;font-size:0.9rem;line-height:1.5">${getT(l, 'content')}</p>${vidHtml}<div class="tip">💡 ${getT(l, 'tip')}</div><div class="qz"><strong>${d.qHead}</strong><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;margin-bottom:6px">${getT(l, 'question')}</div><div>${opts}</div><div class="qz-fb" id="fb-${l.id}"></div></div></div>`;
         });
+    }
+    function filterLessonsByKeyword() {
+        const query = document.getElementById('searchBar').value.toLowerCase().trim(); if(query === "") { renderLessonsGrid(localLessonsCache); return; }
+        const filtered = localLessonsCache.filter(l => {
+            return l.title.toLowerCase().includes(query) || l.content.toLowerCase().includes(query) ||
+                (l.titleSd && l.titleSd.toLowerCase().includes(query)) || (l.contentSd && l.contentSd.toLowerCase().includes(query));
+        });
+        renderLessonsGrid(filtered);
     }
     function toggleLang() {
         curLang = (curLang === 'EN') ? 'SD' : 'EN'; const d = dict[curLang];
@@ -176,18 +188,12 @@
         document.getElementById('lPub').innerText = d.lPub; document.getElementById('c0').innerText = d.c0;
         document.getElementById('c1').innerText = d.c1; document.getElementById('c2').innerText = d.c2;
         document.getElementById('aBtn').innerText = d.aBtn; document.getElementById('vBtn').innerText = d.vBtn;
-        document.getElementById('liveBtn').innerText = d.liveBtn;
-        document.getElementById('devBtn').innerText = d.devBtn;
-
-
-        if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); document.getElementById('tRow').style.flexDirection = "row-reverse"; }
-
-        else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); document.getElementById('tRow').style.flexDirection = "row"; }
-        loadLessons(curCat, document.querySelector('.tabs button.active')); document.getElementById('lblAnnounce').innerText = d.announceHead;
-        document.getElementById('lblAnnounceText').innerText = d.announceTxt;
-        if(curLang === 'SD') { document.getElementById('tickerBlock').classList.add('rtl'); }
-        else { document.getElementById('tickerBlock').classList.remove('rtl'); }
-
+        document.getElementById('liveBtn').innerText = d.liveBtn; document.getElementById('devBtn').innerText = d.devBtn;
+        document.getElementById('lblAnnounce').innerText = d.announceHead; document.getElementById('lblAnnounceText').innerText = d.announceTxt;
+        document.getElementById('searchBar').placeholder = d.searchPlace;
+        if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); document.getElementById('tRow').style.flexDirection = "row-reverse"; document.getElementById('tickerBlock').classList.add('rtl'); }
+        else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); document.getElementById('tRow').style.flexDirection = "row"; document.getElementById('tickerBlock').classList.remove('rtl'); }
+        renderLessonsGrid(localLessonsCache);
     }
     function checkAnswer(id, ch, corr) {
         const fb = document.getElementById(`fb-${id}`); fb.style.display = "block"; const d = dict[curLang];
@@ -198,16 +204,23 @@
     }
     function createNewLesson(e) {
         e.preventDefault();
-        const p = `category=${encodeURIComponent(document.getElementById('formCategory').value)}&title=${encodeURIComponent(document.getElementById('formTitle').value)}&content=${encodeURIComponent(document.getElementById('formContent').value)}&tip=${encodeURIComponent(document.getElementById('formTip').value)}&quizQuestion=${encodeURIComponent(document.getElementById('qzQ').value)}&opt0=${encodeURIComponent(document.getElementById('o0').value)}&opt1=${encodeURIComponent(document.getElementById('o1').value)}&opt2=${encodeURIComponent(document.getElementById('o2').value)}&correctIdx=${document.getElementById('corrIdx').value}&videoUrl=${encodeURIComponent(document.getElementById('formVideo').value)}`;
+        const p = `category=${encodeURIComponent(document.getElementById('formCategory').value)}&title=${encodeURIComponent(document.getElementById('formTitle').value)}&content=${encodeURIComponent(document.getElementById('formContent').value)}&tip=${encodeURIComponent(document.getElementById('formTip').value)}&quizQuestion=${encodeURIComponent(document.getElementById('qzQ').value)}&opt0=${encodeURIComponent(document.getElementById('o0').value)}&opt1=${encodeURIComponent(document.getElementById('o1').value)}&opt2=${encodeURIComponent(document.getElementById('o2').value)}&correctIdx=${document.getElementById('corrIdx').value}&videoUrl=${encodeURIComponent(document.getElementById('formVideo').value)}&titleSd=${encodeURIComponent(document.getElementById('formTitleSd').value)}&contentSd=${encodeURIComponent(document.getElementById('formContentSd').value)}&tipSd=${encodeURIComponent(document.getElementById('formTipSd').value)}&quizQuestionSd=${encodeURIComponent(document.getElementById('qzQSd').value)}&opt0Sd=${encodeURIComponent(document.getElementById('o0Sd').value)}&opt1Sd=${encodeURIComponent(document.getElementById('o1Sd').value)}&opt2Sd=${encodeURIComponent(document.getElementById('o2Sd').value)}`;
         fetch(`/api/lessons/add?${p}`).then(res=>res.json()).then(()=>{
             document.getElementById('formTitle').value=''; document.getElementById('formContent').value=''; document.getElementById('formTip').value=''; document.getElementById('qzQ').value=''; document.getElementById('o0').value=''; document.getElementById('o1').value=''; document.getElementById('o2').value=''; document.getElementById('formVideo').value='';
+            document.getElementById('formTitleSd').value=''; document.getElementById('formContentSd').value=''; document.getElementById('formTipSd').value=''; document.getElementById('qzQSd').value=''; document.getElementById('o0Sd').value=''; document.getElementById('o1Sd').value=''; document.getElementById('o2Sd').value='';
             loadLessons(curCat, document.querySelector('.tabs button.active'));
         });
     }
+
     function deleteLesson(id) {
         if(prompt("🔐 Enter Admin Code:") === "12345") {
-            fetch(`/api/lessons/delete?id=${id}`).then(res=>res.json()).then(()=>{ loadLessons(curCat, document.querySelector('.tabs button.active')); alert("🗑️ Removed."); });
-        } else { alert("❌ Access Denied!"); }
+            fetch(`/api/lessons/delete?id=${id}`).then(res=>res.json()).then(()=>{
+                loadLessons(curCat, document.querySelector('.tabs button.active'));
+                alert("🗑️ Removed.");
+            });
+        } else {
+            alert("❌ Access Denied!");
+        }
     }
     loadLessons('');
 </script>

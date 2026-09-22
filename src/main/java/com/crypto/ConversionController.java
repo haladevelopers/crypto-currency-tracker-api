@@ -1,10 +1,8 @@
 package com.crypto;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +46,23 @@ public class ConversionController {
             @RequestParam("opt1") String opt1,
             @RequestParam("opt2") String opt2,
             @RequestParam("correctIdx") int correctIdx,
-            @RequestParam(value = "videoUrl", defaultValue = "") String videoUrl) {
+            @RequestParam(value = "videoUrl", defaultValue = "") String videoUrl,
+            // 🌟 NEW SINDHI DYNAMIC QUERY PARAMETERS INJECTED HERE
+            @RequestParam("titleSd") String titleSd,
+            @RequestParam("contentSd") String contentSd,
+            @RequestParam("tipSd") String tipSd,
+            @RequestParam("quizQuestionSd") String quizQuestionSd,
+            @RequestParam("opt0Sd") String opt0Sd,
+            @RequestParam("opt1Sd") String opt1Sd,
+            @RequestParam("opt2Sd") String opt2Sd) {
 
         String[] customOptions = new String[]{opt0, opt1, opt2};
-        Lesson dynamicLesson = new Lesson(category, title, content, tip, quizQuestion, customOptions, correctIdx, videoUrl);
+        String[] customOptionsSd = new String[]{opt0Sd, opt1Sd, opt2Sd};
+
+        // Maps the complete bilingual module safely to our relational storage
+        Lesson dynamicLesson = new Lesson(category, title, content, tip, quizQuestion, customOptions, correctIdx, videoUrl,
+                titleSd, contentSd, tipSd, quizQuestionSd, customOptionsSd);
+
         lessonRepository.save(dynamicLesson);
         return lessonRepository.findAll();
     }
