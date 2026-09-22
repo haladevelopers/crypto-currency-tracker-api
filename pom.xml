@@ -19,6 +19,13 @@
     </properties>
 
     <dependencies>
+
+        <!-- 🔒 AUTOMATED REST API DATA FIELD VALIDATION ENGINE -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- The core web routing engine -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
