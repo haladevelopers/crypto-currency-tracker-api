@@ -153,11 +153,36 @@
 
     fetch('/api/convert?usd=1').then(res=>res.json()).then(d=>{document.getElementById('exchangeStatus').innerText=`$1.00 USD = ${d.convertedPkr} PKR`;});
 
+    // 🌟 AUTOMATED INTERNAL BACKEND REDIRECT ENGINE (COMPLETELY IMMUNE TO BLOCKS)
     function updateCryptoRateDisplay(coinKey) {
-        if(cryptoMockRates[coinKey]) {
-            document.getElementById('cryptoValueText').innerText = cryptoMockRates[coinKey];
-        }
+        const displayTextField = document.getElementById('cryptoValueText');
+        displayTextField.innerText = "Fetching live price...";
+
+        // Calls your secure Java Spring Boot route directly from your own server port
+        fetch(`/api/crypto?coin=${coinKey}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Server route busy");
+                return res.json();
+            })
+            .then(payload => {
+                if (payload && payload.data && payload.data.amount) {
+                    const numericPrice = parseFloat(payload.data.amount);
+                    if (numericPrice > 0) {
+                        const formattedPrice = numericPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        displayTextField.innerText = `Value: \$${formattedPrice} USD`;
+                    } else {
+                        displayTextField.innerText = "Value: Offline/Error";
+                    }
+                } else {
+                    displayTextField.innerText = "Value: Offline/Error";
+                }
+            })
+            .catch(err => {
+                console.error("Local route error:", err);
+                displayTextField.innerText = "Value: Offline/Error";
+            });
     }
+
 
     function fetchAndBuildNavigator() {
         fetch('/api/lessons').then(res=>res.json()).then(data => {
