@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Masterclass Room - Hala Academy</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body { background:#0f172a; color:#fff; font-family:sans-serif; margin:0; padding-bottom:40px; }
+        header { background:linear-gradient(to right, #1d4ed8, #2563eb); padding:30px 20px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.4); }
+        main { max-width:1200px; margin:0 auto; padding:24px; box-sizing:border-box; }
+        .grid { display:grid; gap:28px; grid-template-columns:repeat(auto-fit, minmax(450px, 1fr)); }
+        .card { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 10px rgba(0,0,0,0.15); }
+        .card-hd { display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.8rem; }
+        .tag { color:#fbbf24; font-weight:bold; background:rgba(251,191,36,0.1); padding:4px 8px; border-radius:4px; }
+        .tip { background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.15); color:#fde047; padding:12px; border-radius:8px; font-size:0.85rem; margin:12px 0; }
+        .qz { background:#0f172a; padding:14px; border-radius:8px; border:1px solid #475569; margin-top:12px; }
+        .qz-opt { width:100%; text-align:left; background:#1e293b; border:1px solid #475569; padding:10px; color:#fff; border-radius:6px; margin-top:8px; cursor:pointer; font-size:0.85rem; }
+        .qz-opt:hover { border-color:#fbbf24; }
+        .qz-fb { font-size:0.85rem; font-weight:bold; margin-top:10px; padding:8px; border-radius:4px; display:none; }
+        .vid-box { position:relative; width:100%; padding-bottom:56.25%; margin-top:14px; border-radius:8px; overflow:hidden; border:1px solid #475569; }
+        .vid-box iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+        .lang-btn { position:absolute; top:24px; right:24px; background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; }
+        .rtl { direction:rtl; font-family:'Noto Naskh Arabic', sans-serif; }
+        .rtl .qz-opt { text-align:right; }
+    </style>
+</head>
+<body>
+<header>
+    <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
+    <h1 id="titleHead">🔤 ENGLISH LANGUAGE MASTERCLASS ROOM</h1>
+    <p style="color:#cbd5e1; margin-top:6px;">Dedicated space for English Grammar, Sound Drills, and Advanced Sentence Formulation</p>
+</header>
+<main id="mCont">
+    <div id="lessonsGrid" class="grid"></div>
+</main>
+<script>
+    let curLang = 'EN'; let cachedData = [];
+    const dict = {
+        EN: { lBtn:"سنڌي ۾ تبديل ڪريو", qHead:"📝 Quiz Challenge:", cMsg:"🎯 Correct! Excellent job.", iMsg:"❌ Incorrect. Try again!" },
+        SD: { lBtn:"English", qHead:"📝 ڪوئز چيلنج:", cMsg:"🎯 صحيح جواب! تمام بهترين.", iMsg:"❌ غلط جواب. ٻيهر ڪوشش ڪريو!" }
+    };
+
+    function getT(l, property) {
+        if (curLang === 'SD') {
+            if (property === 'title') return l.titleSd ? l.titleSd : l.title;
+            if (property === 'content') return l.contentSd ? l.contentSd : l.content;
+            if (property === 'tip') return l.interactiveTipSd ? l.interactiveTipSd : l.interactiveTip;
+            if (property === 'question') return l.quizQuestionSd ? l.quizQuestionSd : l.quizQuestion;
+        }
+        return l[property] || '';
+    }
+
+    function getOptionsT(l, index) {
+        if (curLang === 'SD') {
+            const sdOpts = l.quizOptionsSd;
+            if (sdOpts && sdOpts[index] && sdOpts[index].trim() !== "") return sdOpts[index];
+        }
+        return l.quizOptions[index];
+    }
+
+    function extVid(url) {
+        if(!url) return "";
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[match.length-1].length === 11) ? match[match.length-1] : url;
+    }
+
+    function loadLessons() {
+        fetch('/api/lessons?category=English').then(res=>res.json()).then(data=>{
+            cachedData = data;
+            renderGrid();
+        });
+    }
+
+    function renderGrid() {
+        const g = document.getElementById('lessonsGrid'); g.innerHTML = ''; const d = dict[curLang];
+        cachedData.forEach((l, index)=>{
+            let opts = '';
+            for(let i=0; i<3; i++) {
+                opts += `<button onclick="checkAnswer(${l.id}, ${i}, ${l.correctOptionIndex})" class="qz-opt" id="opt-${l.id}-${i}">${getOptionsT(l, i)}</button>`;
+            }
+            let vidHtml = ""; if(l.videoUrl && l.videoUrl.trim() !== "") { const vidId = extVid(l.videoUrl); vidHtml = `<div class="vid-box"><iframe src="https://youtube.com{vidId}" allowfullscreen></iframe></div>`; }
+            g.innerHTML += `<div class="card"><div class="card-hd"><span class="tag">Lesson ${index + 1}</span></div><h3>${getT(l, 'title')}</h3><p style="color:#cbd5e1;font-size:0.9rem;line-height:1.5">${getT(l, 'content')}</p>${vidHtml}<div class="tip">💡 ${getT(l, 'tip')}</div><div class="qz"><strong>${d.qHead}</strong><div style="font-size:0.85rem;color:#94a3b8;margin-top:4px;margin-bottom:6px">${getT(l, 'question')}</div><div>${opts}</div><div class="qz-fb" id="fb-${l.id}"></div></div></div>`;
+        });
+    }
+
+    function toggleLang() {
+        curLang = (curLang === 'EN') ? 'SD' : 'EN';
+        document.getElementById('lBtn').innerText = dict[curLang].lBtn;
+        if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); }
+        else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); }
+        renderGrid();
+    }
+
+    function checkAnswer(id, ch, corr) {
+        const fb = document.getElementById(`fb-${id}`); fb.style.display = "block"; const d = dict[curLang];
+        for(let i=0; i<3; i++) { const b = document.getElementById(`opt-${id}-${i}`); if(b) b.style.borderColor="#475569"; }
+        const sel = document.getElementById(`opt-${id}-${ch}`);
+        if(ch === corr) { fb.style.background="rgba(16,185,129,0.15)"; fb.style.color="#34d399"; fb.innerText=d.cMsg; if(sel) sel.style.borderColor="#10b981"; }
+        else { fb.style.background="rgba(239,68,68,0.15)"; fb.style.color="#f87171"; fb.innerText=d.iMsg; if(sel) sel.style.borderColor="#ef4444"; }
+    }
+
+    loadLessons();
+</script>
+</body>
+</html>
