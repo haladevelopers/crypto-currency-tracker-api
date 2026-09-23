@@ -8,26 +8,25 @@
         body { background:#0f172a; color:#fff; font-family:sans-serif; margin:0; padding-bottom:40px; }
         header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:24px 20px; text-align:center; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; gap: 12px; }
         main { max-width:1200px; margin:0 auto; padding:24px; box-sizing:border-box; }
-        .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; }
+        .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
+        .crypto-widget-panel { display:flex; align-items:center; gap:12px; background:#0f172a; border:1px solid #334155; padding:8px 16px; border-radius:6px; }
+        .crypto-select { width:auto; background:#1e293b; border:1px solid #475569; padding:6px 12px; color:#fbbf24; font-weight:bold; border-radius:4px; outline:none; cursor:pointer; }
+        .crypto-val-display { font-weight:bold; color:#10b981; font-size:0.95rem; min-width:140px; }
         .form-sec { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; margin-bottom:28px; box-shadow:0 8px 16px rgba(0,0,0,0.2); }
         .form-row { display: flex; gap:12px; margin-bottom:12px; }
         input, select, textarea { width:100%; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:10px; color:#fff; box-sizing:border-box; outline:none; font-size:0.9rem; }
         input:focus, select:focus, textarea:focus { border-color:#fbbf24; }
         .btn-sub { width:100%; background:#059669; color:#fff; font-weight:bold; padding:14px; border:none; border-radius:6px; cursor:pointer; text-transform:uppercase; font-size:0.95rem; transition:background 0.2s; }
         .btn-sub:hover { background:#10b981; }
-
-        /* 🌟 NEW COMPACT SEARCH NAVIGATOR CONTAINER STYLES */
         .search-container { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .navigator-title { color: #fbbf24; font-weight: bold; margin: 0 0 12px 0; font-size: 1.1rem; }
-
+        .navigator-title { color: #fbbf24; font-weight: bold; margin: 0 0 16px 0; font-size: 1.1rem; text-align:center; }
+        .dropdown-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media(max-width: 768px) { .dropdown-nav-grid { grid-template-columns: 1fr; } }
         .ticker-wrapper { background: #1e293b; border: 1px solid #dc2626; border-radius: 8px; margin-bottom: 24px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(220,38,38,0.15); width: 100%; }
         .ticker-title { background: #dc2626; color: white; padding: 12px 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.3); }
         .ticker-marquee { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
         .ticker-text { display: inline-block; padding-left: 100%; font-weight: bold; color: #fbbf24; font-size: 0.95rem; animation: marquee-scroll 25s linear infinite; }
         @keyframes marquee-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        .rtl .ticker-text { animation: marquee-scroll-rtl 25s linear infinite; padding-left: 0; padding-right: 100%; }
-        @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
-
         .nav-actions { display: flex; gap: 10px; justify-content: center; order: -1; margin-bottom: 4px; flex-wrap: wrap; }
         .lang-btn, .about-btn, .video-btn, .live-btn, .dev-btn { background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; text-decoration: none; font-size: 0.85rem; transition:all 0.2s; white-space: nowrap; }
         .lang-btn:hover, .about-btn:hover, .video-btn:hover, .live-btn:hover, .dev-btn:hover { background:#fbbf24; color:#0f172a; }
@@ -36,6 +35,7 @@
         @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
     </style>
 </head>
+
 <body>
 <header>
     <div class="nav-actions">
@@ -57,8 +57,21 @@
     </div>
     <div class="stats">
         <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24;margin-top:4px">Loading...</div></div>
+
+        <div class="crypto-widget-panel">
+            <small id="lblCryptoHead" style="font-weight:bold; color:#cbd5e1; font-size:0.85rem;">Today's Crypto Currency Rates:</small>
+            <select class="crypto-select" id="cryptoSelectorBox" onchange="updateCryptoRateDisplay(this.value)">
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="BNB">BNB</option>
+                <option value="SOL">SOL</option>
+            </select>
+            <div class="crypto-val-display" id="cryptoValueText">Value: Loading...</div>
+        </div>
+
         <div id="lFree" style="background:#334155;padding:6px 12px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
     </div>
+
     <div class="form-sec">
         <h3 style="margin:0 0 14px 0;color:#fbbf24" id="lForm">➕ Add New Academy Lesson & Quiz</h3>
         <form onsubmit="createNewLesson(event)">
@@ -95,44 +108,74 @@
         </form>
     </div>
 
-    <!-- 🌟 NEW INTELLIGENT AUTO-POPULATING DROPDOWN SELECT NAVIGATOR BOARD BOX -->
     <div class="search-container">
         <div class="navigator-title" id="navHeading">🔍 Find Lesson & Direct Room Navigator:</div>
-        <select id="lessonNavigatorSelect" onchange="navigateToDedicatedRoom(this.value)">
-            <option value="" id="optDefault">Loading available databank lessons dynamically...</option>
-        </select>
+        <div class="dropdown-nav-grid">
+            <div>
+                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropEn">🔤 English Lessons:</label>
+                <select id="selectEnglishRooms" onchange="navigateToDedicatedRoom(this.value)">
+                    <option value="">Loading items...</option>
+                </select>
+            </div>
+            <div>
+                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropAi">🤖 AI & Prompting Lessons:</label>
+                <select id="selectAiRooms" onchange="navigateToDedicatedRoom(this.value)">
+                    <option value="">Loading items...</option>
+                </select>
+            </div>
+            <div>
+                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropEarn">💰 Digital Earning Lessons:</label>
+                <select id="selectEarningRooms" onchange="navigateToDedicatedRoom(this.value)">
+                    <option value="">Loading items...</option>
+                </select>
+            </div>
+        </div>
     </div>
 </main>
 <script>
+
     let curLang = 'EN'; let globalLessonsList = [];
+    const cryptoMockRates = {
+        BTC: "Value: \$63,840.50 USD",
+        ETH: "Value: \$2,580.20 USD",
+        BNB: "Value: \$575.40 USD",
+        SOL: "Value: \$145.80 USD"
+    };
     const dict = {
-        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", liveBtn:"📡 Live Lectures", devBtn:"👨‍💻 Developer Profile", announceHead:"Announcements", announceTxt:"📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on \"Live Lectures\" at the top header to join our virtual classroom room instantly!", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct", navHead:"🔍 Find Lesson & Direct Room Navigator:", optDefault:"-- Select a lesson topic summary to enter its dedicated showroom --" },
-        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", liveBtn:"📡 لائيو ليڪچرز", devBtn:"👨‍💻 ڊولپر پروفائل", announceHead:"اشتهارن جو بورڊ", announceTxt:"📢 هالا اڪيڊمي ۾ ڀليڪار! اڄ رات 9:00 وڳي انگريزي جو نئون لائيو زوم ڪلاس شروع ٿيندو. ڪلاس ۾ شامل ٿيڻ لاءِ مٿي ڏنل 'لائيو ليڪچرز' تي ڪلڪ ڪريو!", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح", navHead:"🔍 سبق ڳوليو ۽ سڌو روم ڏانهن وڃو:", optDefault:"-- پنهنجي پسند جو سبق چونڊيو ۽ ان جي خاص ڪمري ۾ داخل ٿيو --" }
+        EN: { t1:"HALA LITERACY ACADEMY", t2:"Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟", lCurr:"PLATFORM CURRENCY STATUS", lFree:"FREE", lForm:"➕ Add New Academy Lesson & Quiz", lPub:"🚀 Publish Full Module", lBtn:"سنڌي ۾ تبديل ڪريو", aBtn:"ℹ️ About Academy", vBtn:"📺 Video Lessons", liveBtn:"📡 Live Lectures", devBtn:"👨‍💻 Developer Profile", announceHead:"Announcements", announceTxt:"📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on \"Live Lectures\" at the top header to join our virtual classroom room instantly!", c0:"Option 1 Correct", c1:"Option 2 Correct", c2:"Option 3 Correct", navHead:"🔍 Find Lesson & Direct Room Navigator:", cryptoHead:"Today's Crypto Currency Rates:", dropEn:"🔤 English Lessons:", dropAi:"🤖 AI & Prompting Lessons:", dropEarn:"💰 Digital Earning Lessons:", optDefault:"-- Select Topic to Enter Room --" },
+        SD: { t1:"هالا لٽريسي اڪيڊمي", t2:"سنڌ جي نوجوانن کي مفت انگريزي، اي آئي ۽ ڊجيٽل مهارتن سان بااختيار بڻائڻ 🌟", lCurr:"پليٽ فارم ڪرنسي جي صورتحال", lFree:"مفت", lForm:"➕ نئون سبق ۽ ڪوئز شامل ڪريو", lPub:"🚀 مڪمل ماڊل شايع ڪريو", lBtn:"English", aBtn:"ℹ️ اڪيڊمي بابت", vBtn:"📺 وڊيو اسباق", liveBtn:"📡 لائيو ليڪچرز", devBtn:"👨‍💻 ڊولپر پروفائل", announceHead:"اشتهارن جو بورڊ", announceTxt:"📢 هالا اڪيڊمي ۾ ڀليڪار! اڄ رات 9:00 وڳي انگريزي جو نئون لائيو زوم ڪلاس شروع ٿيندو. ڪلاس ۾ شامل ٿيڻ لاءِ مٿي ڏنل 'لائيو ليڪچرز' تي ڪلڪ ڪريو!", c0:"آپشن 1 صحيح", c1:"آپشن 2 صحيح", c2:"آپشن 3 صحيح", navHead:"🔍 سبق ڳوليو ۽ سڌو روم ڏانهن وڃو:", cryptoHead:"اڄڪلهه جا ڪريپٽو ڪرنسي ريٽس:", dropEn:"🔤 انگريزي اسباق:", dropAi:"🤖 اي آئي اسباق:", dropEarn:"💰 ڊجيٽل ڪمائي اسباق:", optDefault:"-- سبق چونڊيو ۽ ڪمري ۾ داخل ٿيو --" }
     };
 
     function getT(l, property) {
-        if (curLang === 'SD') {
-            if (property === 'title') return l.titleSd ? l.titleSd : l.title;
-        }
+        if (curLang === 'SD' && property === 'title') return l.titleSd ? l.titleSd : l.title;
         return l[property] || '';
     }
 
     fetch('/api/convert?usd=1').then(res=>res.json()).then(d=>{document.getElementById('exchangeStatus').innerText=`$1.00 USD = ${d.convertedPkr} PKR`;});
 
-    // 🌟 AUTOMATED DROPDOWN GENERATOR ENGINE SUB-ROUTINE
+    function updateCryptoRateDisplay(coinKey) {
+        if(cryptoMockRates[coinKey]) {
+            document.getElementById('cryptoValueText').innerText = cryptoMockRates[coinKey];
+        }
+    }
+
     function fetchAndBuildNavigator() {
         fetch('/api/lessons').then(res=>res.json()).then(data => {
             globalLessonsList = data;
-            populateDropdown();
+            populateIndependentDropdowns();
         });
     }
 
-    function populateDropdown() {
-        const selectBox = document.getElementById('lessonNavigatorSelect');
+    function populateIndependentDropdowns() {
+        const boxEn = document.getElementById('selectEnglishRooms');
+        const boxAi = document.getElementById('selectAiRooms');
+        const boxEarn = document.getElementById('selectEarningRooms');
         const d = dict[curLang];
-        selectBox.innerHTML = `<option value="">${d.optDefault}</option>`;
 
-        // Track counts dynamically by subject streams
+        boxEn.innerHTML = `<option value="">${d.optDefault}</option>`;
+        boxAi.innerHTML = `<option value="">${d.optDefault}</option>`;
+        boxEarn.innerHTML = `<option value="">${d.optDefault}</option>`;
+
         let counts = { English: 0, AI: 0, Earning: 0 };
 
         globalLessonsList.forEach(l => {
@@ -140,17 +183,21 @@
                 counts[l.category]++;
                 const lessonNum = counts[l.category];
                 const displayedTitle = getT(l, 'title');
-                // Combines Lesson Number, Category Stream, and Topic Details seamlessly into the option text label
-                selectBox.innerHTML += `<option value="${l.category.toLowerCase()}.html">[${l.category}] Lesson ${lessonNum}: ${displayedTitle} (${l.interactiveTip || ''})</option>`;
+                const optionHtml = `<option value="${l.category.toLowerCase()}.html">Lesson ${lessonNum}: ${displayedTitle}</option>`;
+
+                if(l.category === 'English') boxEn.innerHTML += optionHtml;
+                if(l.category === 'AI') boxAi.innerHTML += optionHtml;
+                if(l.category === 'Earning') boxEarn.innerHTML += optionHtml;
             }
         });
     }
 
-    // 🌟 CROSS-PAGE INTERFACE ROUTER CORE
     function navigateToDedicatedRoom(urlTarget) {
         if(urlTarget && urlTarget.trim() !== "") {
             window.open(urlTarget, '_blank');
-            document.getElementById('lessonNavigatorSelect').value = ""; // Reset dropdown selection index
+            document.getElementById('selectEnglishRooms').value = "";
+            document.getElementById('selectAiRooms').value = "";
+            document.getElementById('selectEarningRooms').value = "";
         }
     }
 
@@ -165,21 +212,25 @@
         document.getElementById('liveBtn').innerText = d.liveBtn; document.getElementById('devBtn').innerText = d.devBtn;
         document.getElementById('lblAnnounce').innerText = d.announceHead; document.getElementById('lblAnnounceText').innerText = d.announceTxt;
         document.getElementById('navHeading').innerText = d.navHead;
+        document.getElementById('lblCryptoHead').innerText = d.cryptoHead;
+        document.getElementById('lblDropEn').innerText = d.dropEn; document.getElementById('lblDropAi').innerText = d.dropAi;
+        document.getElementById('lblDropEarn').innerText = d.dropEarn;
         if(curLang === 'SD') { document.body.classList.add('rtl'); document.getElementById('mCont').classList.add('rtl'); document.getElementById('tickerBlock').classList.add('rtl'); }
         else { document.body.classList.remove('rtl'); document.getElementById('mCont').classList.remove('rtl'); document.getElementById('tickerBlock').classList.remove('rtl'); }
-        populateDropdown();
+        populateIndependentDropdowns();
     }
 
     function createNewLesson(e) {
         e.preventDefault();
         const p = `category=${encodeURIComponent(document.getElementById('formCategory').value)}&title=${encodeURIComponent(document.getElementById('formTitle').value)}&content=${encodeURIComponent(document.getElementById('formContent').value)}&tip=${encodeURIComponent(document.getElementById('formTip').value)}&quizQuestion=${encodeURIComponent(document.getElementById('qzQ').value)}&opt0=${encodeURIComponent(document.getElementById('o0').value)}&opt1=${encodeURIComponent(document.getElementById('o1').value)}&opt2=${encodeURIComponent(document.getElementById('o2').value)}&correctIdx=${document.getElementById('corrIdx').value}&videoUrl=${encodeURIComponent(document.getElementById('formVideo').value)}&titleSd=${encodeURIComponent(document.getElementById('formTitleSd').value)}&contentSd=${encodeURIComponent(document.getElementById('formContentSd').value)}&tipSd=${encodeURIComponent(document.getElementById('formTipSd').value)}&quizQuestionSd=${encodeURIComponent(document.getElementById('qzQSd').value)}&opt0Sd=${encodeURIComponent(document.getElementById('o0Sd').value)}&opt1Sd=${encodeURIComponent(document.getElementById('o1Sd').value)}&opt2Sd=${encodeURIComponent(document.getElementById('o2Sd').value)}`;
-        fetch(`/api/lessons/add?${p}`).then(res=>res.json()).then(()=>{
+        fetch(`/api/lessons/add?${p}`).then(res=>res.json()).then(() => {
             document.getElementById('formTitle').value=''; document.getElementById('formContent').value=''; document.getElementById('formTip').value=''; document.getElementById('qzQ').value=''; document.getElementById('o0').value=''; document.getElementById('o1').value=''; document.getElementById('o2').value=''; document.getElementById('formVideo').value='';
             document.getElementById('formTitleSd').value=''; document.getElementById('formContentSd').value=''; document.getElementById('formTipSd').value=''; document.getElementById('qzQSd').value=''; document.getElementById('o0Sd').value=''; document.getElementById('o1Sd').value=''; document.getElementById('o2Sd').value='';
             fetchAndBuildNavigator();
         });
     }
 
+    updateCryptoRateDisplay("BTC");
     fetchAndBuildNavigator();
 </script>
 </body>
