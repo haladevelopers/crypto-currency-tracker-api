@@ -1,136 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sindh Academy Matrix</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hala Academy - NextGen Portal</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { background:#0f172a; color:#fff; font-family:sans-serif; margin:0; padding-bottom:40px; }
-        header { background:linear-gradient(to right, #f59e0b, #dc2626); padding:24px 20px; text-align:center; position:relative; box-shadow:0 4px 15px rgba(0,0,0,0.4); display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        main { max-width:1200px; margin:0 auto; padding:24px; box-sizing:border-box; }
-        .stats { background:#1e293b; border:1px solid #334155; border-radius:8px; padding:15px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
-        .crypto-widget-panel { display:flex; align-items:center; gap:12px; background:#0f172a; border:1px solid #334155; padding:8px 16px; border-radius:6px; }
-        .crypto-select { width:auto; background:#1e293b; border:1px solid #475569; padding:6px 12px; color:#fbbf24; font-weight:bold; border-radius:4px; outline:none; cursor:pointer; }
-        .crypto-val-display { font-weight:bold; color:#10b981; font-size:0.95rem; min-width:140px; }
-        .form-sec { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:24px; margin-bottom:28px; box-shadow:0 8px 16px rgba(0,0,0,0.2); }
-        .form-row { display: flex; gap:12px; margin-bottom:12px; }
-        input, select, textarea { width:100%; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:10px; color:#fff; box-sizing:border-box; outline:none; font-size:0.9rem; }
-        input:focus, select:focus, textarea:focus { border-color:#fbbf24; }
-        .btn-sub { width:100%; background:#059669; color:#fff; font-weight:bold; padding:14px; border:none; border-radius:6px; cursor:pointer; text-transform:uppercase; font-size:0.95rem; transition:background 0.2s; }
-        .btn-sub:hover { background:#10b981; }
-        .search-container { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .navigator-title { color: #fbbf24; font-weight: bold; margin: 0 0 16px 0; font-size: 1.1rem; text-align:center; }
-        .dropdown-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        @media(max-width: 768px) { .dropdown-nav-grid { grid-template-columns: 1fr; } }
-        .ticker-wrapper { background: #1e293b; border: 1px solid #dc2626; border-radius: 8px; margin-bottom: 24px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(220,38,38,0.15); width: 100%; }
-        .ticker-title { background: #dc2626; color: white; padding: 12px 20px; font-weight: bold; font-size: 0.9rem; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.3); }
-        .ticker-marquee { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; }
-        .ticker-text { display: inline-block; padding-left: 100%; font-weight: bold; color: #fbbf24; font-size: 0.95rem; animation: marquee-scroll 25s linear infinite; }
+        /* 🌌 ENTERPRISE SAAS SYSTEM PITCH-BLACK CORE STYLES */
+        body { background:#09090b; color:#fafafa; font-family:'Plus Jakarta Sans', sans-serif; margin:0; padding:0; display:flex; height:100vh; overflow:hidden; }
+
+        /* 🚪 VERTICAL FIXED SIDEBAR CONSOLE LAYOUT */
+        .sidebar { width:280px; background:#121214; border-right:1px solid #27272a; display:flex; flex-direction:column; justify-content:space-between; padding:24px 16px; box-sizing:border-box; z-index:10; }
+        .brand-section { padding-bottom:20px; border-bottom:1px solid #27272a; }
+        .brand-title { font-weight:800; font-size:1.6rem !important; color:#fbbf24; letter-spacing:-0.5px; margin:0; text-transform:uppercase; }
+        .sidebar span { font-size:0.95rem !important; font-weight:600; color:#71717a; }
+        .nav-menu-list { display:flex; flex-direction:column; gap:10px; margin-top:24px; }
+        .nav-item-link { display:flex; align-items:center; gap:14px; color:#a1a1aa; text-decoration:none; padding:16px 14px; border-radius:8px; font-weight:700 !important; font-size:1.15rem !important; transition:all 0.2s ease; }
+        .nav-item-link:hover { background:#1e1e22; color:#fff; transform:translateX(4px); }
+        .lang-toggle-btn { background:#fbbf24; color:#09090b; border:none; padding:16px; border-radius:8px; font-weight:800 !important; width:100%; cursor:pointer; font-size:1.1rem !important; transition:opacity 0.2s; }
+        .lang-toggle-btn:hover { opacity:0.9; }
+
+        /* 💻 CENTRAL WORKSPACE ASYNC DECK PANEL */
+        .workspace-panel { flex:1; display:flex; flex-direction:column; overflow-y:auto; background:#09090b; }
+
+        /* 📣 BULLETPROOF INSULATED MARQUEE ROW (ISOLATED FROM RTL DRIFT) */
+        .top-marquee-row { background: rgba(30, 41, 59, 0.6); border-bottom: 1px solid #27272a; margin-bottom: 32px; overflow: hidden; display: flex; align-items: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); width: 100%; height: 56px; backdrop-filter: blur(8px); box-sizing: border-box; padding: 0 24px; direction: ltr !important; }
+        .announcement-badge { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; padding: 6px 14px; display: flex; align-items: center; font-weight: 800 !important; font-size: 1.1rem !important; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; box-shadow: 2px 0 10px rgba(0,0,0,0.4); border-radius: 4px; z-index: 2; margin-right: 16px; direction: ltr !important; }
+        .marquee-stream { flex: 1; overflow: hidden; white-space: nowrap; display: flex; align-items: center; height: 100%; direction: ltr !important; }
+        .marquee-content-text { display: inline-block; padding-left: 100%; font-weight: 800 !important; color: #fbbf24; font-size: 1.35rem !important; animation: marquee-scroll 25s linear infinite !important; line-height: 56px; direction: ltr !important; }
         @keyframes marquee-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        .nav-actions { display: flex; gap: 10px; justify-content: center; order: -1; margin-bottom: 4px; flex-wrap: wrap; }
-        .lang-btn, .about-btn, .video-btn, .live-btn, .dev-btn { background:#0f172a; color:#fbbf24; border:2px solid #fbbf24; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer; text-decoration: none; font-size: 0.85rem; transition:all 0.2s; white-space: nowrap; }
-        .lang-btn:hover, .about-btn:hover, .video-btn:hover, .live-btn:hover, .dev-btn:hover { background:#fbbf24; color:#0f172a; }
-        .rtl { direction:rtl; font-family:'Noto Naskh Arabic', sans-serif; }
-        .rtl .ticker-text { animation: marquee-scroll-rtl 25s linear infinite; padding-left: 0; padding-right: 100%; }
-        @keyframes marquee-scroll-rtl { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+
+        /* 💻 PROPORTIONALLY WIDENED MIDDLE WORKSPACE DECK PANEL */
+        .dashboard-content {
+            padding: 16px 24px;
+            max-width: 1150px; /* Expanded slightly to give your forms the ultimate widescreen look */
+            margin: 0 auto; /* Keeps the form card deck centered beautifully within the middle row */
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* 📊 METRICS & CRYPTO COMPACT HEADER TRACK */
+        .metrics-grid-row { display:flex; justify-content:space-between; align-items:center; gap:20px; background:#121214; border:1px solid #27272a; border-radius:12px; padding:20px; margin-bottom:32px; flex-wrap:wrap; }
+        .metrics-grid-row div, .metrics-grid-row small { font-size: 1.1rem !important; font-weight: 700 !important; }
+        #exchangeStatus, #cryptoValueText { font-size: 1.4rem !important; font-weight: 800 !important; margin-top: 6px; }
+        .crypto-widget-panel { display:flex; align-items:center; gap:12px; background:#18181b; border:1px solid #27272a; padding:8px 16px; border-radius:8px; }
+        .crypto-widget-panel small { font-size: 1.1rem !important; font-weight: 700 !important; }
+        .crypto-select { background:#121214; border:1px solid #27272a; padding:6px 12px; color:#fbbf24; font-weight:700; border-radius:6px; outline:none; cursor:pointer; }
+        .crypto-val-display { font-weight:700; color:#10b981; font-size:0.95rem; min-width:130px; }
+
+        /* ➕ ENTERPRISE DATA FORMS */
+        .form-container-card { background:#121214; border:1px solid #27272a; border-radius:16px; padding:32px; margin-bottom:32px; box-shadow:0 4px 25px rgba(0,0,0,0.3); width:100%; box-sizing:border-box; }
+        .form-row { display:flex; gap:16px; margin-bottom:16px; }
+        input, select, textarea { width: 100%; background: #18181b; border: 1px solid #27272a; border-radius: 10px; padding: 16px 20px; color: #fff; box-sizing: border-box; outline: none; font-size: 1.25rem !important; font-weight: 700 !important; font-family: inherit; transition: all 0.2s ease; }
+        input:focus, select:focus, textarea:focus { border-color: #fbbf24; background: #1f1f23; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15); }
+        .btn-primary-submit { width: 100%; background: #10b981; color: #09090b; font-weight: 800 !important; padding: 18px; border: none; border-radius: 10px; cursor: pointer; text-transform: uppercase; font-size: 1.25rem !important; letter-spacing: 1px; transition: opacity 0.2s; }
+        .btn-primary-submit:hover { opacity:0.9; }
+
+        /* 🔍 TRIPLE DROPDOWN NAVIGATOR PANEL */
+        .navigator-box-card { background:#121214; border:1px solid #27272a; border-radius:16px; padding:32px; width:100%; box-sizing:border-box; }
+        .dropdown-flex-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+        .navigator-box-card label { display: block; font-size: 1.2rem !important; margin-bottom: 10px; color: #fbbf24; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* 💬 SECTION 3: EXPANDED RIGHT DISCUSSION STREAM MATRIX */
+        .right-discussion-panel {
+            width: 365px; /* Widened from 330px to perfectly balance your viewport grid tracks */
+            background: #121214;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 28px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            z-index: 10;
+            margin: 16px 16px 16px 0;
+        }
+
+        /* 🚪 SECTION 1: EXPANDED LEFT SIDEBAR CONSOLE PILLAR */
+        .sidebar {
+            width: 320px; /* Widened from 290px to maximize console link readability */
+            background: #121214;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 28px 20px;
+            box-sizing: border-box;
+            z-index: 10;
+            margin: 16px 0 16px 16px;
+        }
+
+        /* 🌟 HIGH-IMPACT SCALED TYPOGRAPHY FOR SIDE CONSOLES */
+        .brand-title { font-size: 1.85rem !important; font-weight: 800; }
+        .sidebar span { font-size: 1.1rem !important; font-weight: 600; }
+        .nav-item-link { font-size: 1.3rem !important; font-weight: 700; padding: 18px 16px; }
+        .lang-toggle-btn { font-size: 1.25rem !important; font-weight: 800; padding: 18px; }
+
+        .discussion-title { font-size: 1.65rem !important; font-weight: 800; }
+        .right-discussion-panel div { font-size: 1.2rem !important; font-weight: 600; }
+        .room-tag-box { font-size: 1.3rem !important; font-weight: 700; padding: 18px; }
+
+
     </style>
 </head>
 
+
 <body>
-<header>
-    <div class="nav-actions">
-        <button onclick="toggleLang()" class="lang-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
-        <a href="/about.html" target="_blank" class="about-btn" id="aBtn">ℹ️ About Academy</a>
-        <a href="/videos.html" target="_blank" class="video-btn" id="vBtn">📺 Video Lessons</a>
-        <a href="/live.html" target="_blank" class="live-btn" id="liveBtn">📡 Live Lectures</a>
-        <a href="https://github.io" target="_blank" class="dev-btn" id="devBtn">👨‍💻 Developer Profile</a>
-    </div>
-    <h1 id="t1">HALA LITERACY ACADEMY</h1>
-    <p id="t2">Empowering the youth of Sindh with Free English, AI & Digital Skills 🌟</p>
-</header>
-<main id="mCont">
-    <div class="ticker-wrapper" id="tickerBlock">
-        <div class="ticker-title" id="lblAnnounce">Announcements</div>
-        <div class="ticker-marquee">
-            <div class="ticker-text" id="lblAnnounceText">📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on "Live Lectures" at the top header to join our virtual classroom room instantly!</div>
+
+<!-- 🚪 SECTION 1: FIXED LEFT PANEL CONSOLE -->
+<div class="sidebar">
+    <div>
+        <div class="brand-section">
+            <h2 class="brand-title" id="t1">Hala Academy</h2>
+            <span style="font-size:0.75rem; color:#71717a;" id="t2">NextGen Learn Platform</span>
+        </div>
+        <div class="nav-menu-list">
+            <a href="/about.html" target="_blank" class="nav-item-link" id="aBtn">ℹ️ About Hub</a>
+            <a href="/videos.html" target="_blank" class="nav-item-link" id="vBtn">📺 Showroom</a>
+            <a href="/live.html" target="_blank" class="nav-item-link" id="liveBtn">📡 Live Room</a>
+            <a href="https://github.io" target="_blank" class="nav-item-link" id="devBtn">👨‍💻 Profile</a>
         </div>
     </div>
-    <div class="stats">
-        <div><small id="lCurr" style="color:#94a3b8">PLATFORM CURRENCY STATUS</small><div id="exchangeStatus" style="font-weight:bold;color:#fbbf24;margin-top:4px">Loading...</div></div>
-
-        <div class="crypto-widget-panel">
-            <small id="lblCryptoHead" style="font-weight:bold; color:#cbd5e1; font-size:0.85rem;">Today's Crypto Currency Rates:</small>
-            <select class="crypto-select" id="cryptoSelectorBox" onchange="updateCryptoRateDisplay(this.value)">
-                <option value="BTC">BTC</option>
-                <option value="ETH">ETH</option>
-                <option value="BNB">BNB</option>
-                <option value="SOL">SOL</option>
-            </select>
-            <div class="crypto-val-display" id="cryptoValueText">Value: Loading...</div>
-        </div>
-
-        <div id="lFree" style="background:#334155;padding:6px 12px;border-radius:6px;color:#10b981;font-weight:bold">FREE</div>
+    <div>
+        <button onclick="toggleLang()" class="lang-toggle-btn" id="lBtn">سنڌي ۾ تبديل ڪريو</button>
     </div>
+</div>
 
-    <div class="form-sec">
-        <h3 style="margin:0 0 14px 0;color:#fbbf24" id="lForm">➕ Add New Academy Lesson & Quiz</h3>
-        <form onsubmit="createNewLesson(event)">
-            <div class="form-row">
-                <select id="formCategory" style="flex:1"><option value="English">English</option><option value="AI">AI</option><option value="Earning">Earning</option></select>
-                <input type="text" id="formTitle" style="flex:2" required placeholder="Lesson Topic / Title (English)">
-                <input type="text" id="formTitleSd" style="flex:2; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="عنوان / موضوع (سنڌي)">
-            </div>
-            <div class="form-row">
-                <textarea id="formContent" required rows="2" placeholder="Lesson content details (English)..." style="flex:1"></textarea>
-                <textarea id="formContentSd" rows="2" placeholder="سبق جا تفصيل (سنڌي)..." style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;"></textarea>
-            </div>
-            <div class="form-row">
-                <input type="text" id="formTip" style="flex:1" required placeholder="Interactive teacher tip (English)...">
-                <input type="text" id="formTipSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="استاد جي خاص ٽپ (سنڌي)...">
-            </div>
-            <div class="form-row">
-                <input type="text" id="formVideo" style="flex:1" placeholder="YouTube Video Link or ID (Optional)">
-                <input type="text" id="qzQ" style="flex:1" required placeholder="Quiz Question (English)...">
-                <input type="text" id="qzQSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="ڪوئز جو سوال (سنڌي)...">
-            </div>
-            <div class="form-row">
-                <input type="text" id="o0" required placeholder="Option 1 (English)">
-                <input type="text" id="o1" required placeholder="Option 2 (English)">
-                <input type="text" id="o2" required placeholder="Option 3 (English)">
-            </div>
-            <div class="form-row" style="direction: rtl;">
-                <input type="text" id="o0Sd" placeholder="آپشن 1 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
-                <input type="text" id="o1Sd" placeholder="آپشن 2 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
-                <input type="text" id="o2Sd" placeholder="آپشن 3 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
-            </div>
-            <select id="corrIdx" style="margin-bottom:15px"><option value="0" id="c0">Option 1 Correct</option><option value="1" id="c1">Option 2 Correct</option><option value="2" id="c2">Option 3 Correct</option></select>
-            <button type="submit" class="btn-sub" id="lPub">🚀 Publish Full Bilingual Module</button>
-        </form>
-    </div>
-
-    <div class="search-container">
-        <div class="navigator-title" id="navHeading">🔍 Find Lesson & Direct Room Navigator:</div>
-        <div class="dropdown-nav-grid">
-            <div>
-                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropEn">🔤 English Lessons:</label>
-                <select id="selectEnglishRooms" onchange="navigateToDedicatedRoom(this.value)">
-                    <option value="">Loading items...</option>
-                </select>
-            </div>
-            <div>
-                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropAi">🤖 AI & Prompting Lessons:</label>
-                <select id="selectAiRooms" onchange="navigateToDedicatedRoom(this.value)">
-                    <option value="">Loading items...</option>
-                </select>
-            </div>
-            <div>
-                <label style="display:block; font-size:0.8rem; margin-bottom:6px; color:#cbd5e1;" id="lblDropEarn">💰 Digital Earning Lessons:</label>
-                <select id="selectEarningRooms" onchange="navigateToDedicatedRoom(this.value)">
-                    <option value="">Loading items...</option>
-                </select>
-            </div>
+<!-- 💻 SECTION 2: CENTRAL INTERACTIVE ACTIVE DECK -->
+<div class="workspace-panel" id="mCont">
+    <div class="top-marquee-row" id="tickerBlock">
+        <span class="announcement-badge" id="lblAnnounce">Alert</span>
+        <div class="marquee-stream">
+            <div class="marquee-content-text" id="lblAnnounceText">📢 Welcome to Hala Academy! New Live Zoom English Class starting tonight at 9:00 PM PKT. Click on "Live Lectures" inside your sidebar console to log into your virtual classroom instantly!</div>
         </div>
     </div>
+
+    <div class="dashboard-content">
+        <div class="metrics-grid-row">
+            <div>
+                <small id="lCurr" style="color:#71717a; font-weight:700; font-size:0.75rem; text-transform:uppercase;">Platform Currency Status</small>
+                <div id="exchangeStatus" style="font-weight:700; color:#fbbf24; margin-top:4px; font-size:1.1rem;">Loading...</div>
+            </div>
+
+            <div class="crypto-widget-panel">
+                <small id="lblCryptoHead" style="font-weight:600; color:#a1a1aa; font-size:0.8rem;">Live Market Ticker:</small>
+                <select class="crypto-select" id="cryptoSelectorBox" onchange="updateCryptoRateDisplay(this.value)">
+                    <option value="BTC">BTC</option>
+                    <option value="ETH">ETH</option>
+                    <option value="BNB">BNB</option>
+                    <option value="SOL">SOL</option>
+                </select>
+                <div class="crypto-val-display" id="cryptoValueText">Value: Syncing...</div>
+            </div>
+
+            <div id="lFree" style="background:rgba(16,185,129,0.1); color:#10b981; border:1px solid rgba(16,185,129,0.2); padding:6px 12px; border-radius:6px; font-weight:700; font-size:0.85rem;">FREE GATES</div>
+        </div>
+
+        <div class="form-container-card">
+            <h3 style="margin:0 0 20px 0; color:#fff; font-size:1.1rem; font-weight:700;" id="lForm">➕ Publish New Bilingual Course Module</h3>
+            <form onsubmit="createNewLesson(event)">
+                <div class="form-row">
+                    <select id="formCategory" style="flex:1"><option value="English">English</option><option value="AI">AI</option><option value="Earning">Earning</option></select>
+                    <input type="text" id="formTitle" style="flex:2" required placeholder="Lesson Topic / Title (English)">
+                    <input type="text" id="formTitleSd" style="flex:2; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="عنوان / موضوع (سنڌي)">
+                </div>
+                <div class="form-row">
+                    <textarea id="formContent" required rows="2" placeholder="Lesson content details (English)..." style="flex:1"></textarea>
+                    <textarea id="formContentSd" rows="2" placeholder="سبق جا تفصيل (سنڌي)..." style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;"></textarea>
+                </div>
+                <div class="form-row">
+                    <input type="text" id="formTip" style="flex:1" required placeholder="Interactive teacher tip (English)...">
+                    <input type="text" id="formTipSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="استاد جي خاص ٽپ (سنڌي)...">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="formVideo" style="flex:1" placeholder="YouTube Video Link or ID (Optional)">
+                    <input type="text" id="qzQ" style="flex:1" required placeholder="Quiz Question (English)...">
+                    <input type="text" id="qzQSd" style="flex:1; direction: rtl; font-family: 'Noto Naskh Arabic', sans-serif;" placeholder="ڪوئز جو سوال (سنڌي)...">
+                </div>
+                <div class="form-row">
+                    <input type="text" id="o0" required placeholder="Option 1 (English)">
+                    <input type="text" id="o1" required placeholder="Option 2 (English)">
+                    <input type="text" id="o2" required placeholder="Option 3 (English)">
+                </div>
+                <div class="form-row" style="direction: rtl;">
+                    <input type="text" id="o0Sd" placeholder="آپشن 1 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
+                    <input type="text" id="o1Sd" placeholder="آپشن 2 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
+                    <input type="text" id="o2Sd" placeholder="آپشن 3 (سنڌي)" style="font-family: 'Noto Naskh Arabic', sans-serif;">
+                </div>
+                <select id="corrIdx" style="margin-bottom:15px"><option value="0" id="c0">Option 1 Correct</option><option value="1" id="c1">Option 2 Correct</option><option value="2" id="c2">Option 3 Correct</option></select>
+                <button type="submit" class="btn-primary-submit" id="lPub">🚀 Deploy System Module</button>
+            </form>
+        </div>
+
+        <div class="navigator-box-card">
+            <div class="navigator-title" id="navHeading">🔍 Fast Selection Showroom Navigator:</div>
+            <div class="dropdown-flex-grid">
+                <div>
+                    <label style="display:block; font-size:0.75rem; margin-bottom:6px; color:#a1a1aa; font-weight:600;" id="lblDropEn">🔤 English Core:</label>
+                    <select id="selectEnglishRooms" onchange="navigateToDedicatedRoom(this.value)">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block; font-size:0.75rem; margin-bottom:6px; color:#a1a1aa; font-weight:600;" id="lblDropAi">🤖 Advanced AI:</label>
+                    <select id="selectAiRooms" onchange="navigateToDedicatedRoom(this.value)">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block; font-size:0.75rem; margin-bottom:6px; color:#a1a1aa; font-weight:600;" id="lblDropEarn">💰 Digital Monetization:</label>
+                    <select id="selectEarningRooms" onchange="navigateToDedicatedRoom(this.value)">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 💬 SECTION 3: FIXED RIGHT PANEL PROJECT CHAT INTERACTION MATRIX -->
+<div class="right-discussion-panel">
+    <h3 class="discussion-title">💬 Project Discussion</h3>
+    <div style="font-size:0.8rem; color:#71717a; margin-bottom:10px;">Voice Rooms & Community Chat</div>
+    <div class="room-tag-box" style="border-left:3px solid #fbbf24;">🔊 #project-voice-chat</div>
+    <div class="room-tag-box" style="border-left:3px solid #10b981;">💬 #general-discussion</div>
+    <div class="room-tag-box" style="border-left:3px solid #3b82f6;">❓ #quiz-help-desk</div>
+    <div style="margin-top:auto; font-size:0.75rem; color:#4b5563; text-align:center;">Hala Academy v3.0.0 (Stable)</div>
+</div>
+
+
 </main>
 <script>
 
@@ -153,37 +253,31 @@
 
     fetch('/api/convert?usd=1').then(res=>res.json()).then(d=>{document.getElementById('exchangeStatus').innerText=`$1.00 USD = ${d.convertedPkr} PKR`;});
 
-    // 🌟 AUTOMATED INTERNAL BACKEND REDIRECT ENGINE (COMPLETELY IMMUNE TO BLOCKS)
+    // 🪙 SECURE JAVA BACKEND PROXY ROUTE CALL
     function updateCryptoRateDisplay(coinKey) {
         const displayTextField = document.getElementById('cryptoValueText');
         displayTextField.innerText = "Fetching live price...";
 
-        // Calls your secure Java Spring Boot route directly from your own server port
-        fetch(`/api/crypto?coin=${coinKey}`)
+        // Calls your Java ConversionController endpoint securely
+        fetch('/api/crypto?coin=' + coinKey)
             .then(res => {
-                if (!res.ok) throw new Error("Server route busy");
+                if (!res.ok) throw new Error("Backend connection error");
                 return res.json();
             })
-            .then(payload => {
-                if (payload && payload.data && payload.data.amount) {
-                    const numericPrice = parseFloat(payload.data.amount);
-                    if (numericPrice > 0) {
-                        const formattedPrice = numericPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                        displayTextField.innerText = `Value: \$${formattedPrice} USD`;
-                    } else {
-                        displayTextField.innerText = "Value: Offline/Error";
-                    }
+            .then(responseWrapper => {
+                if (responseWrapper && responseWrapper.data && responseWrapper.data.amount) {
+                    const numericPrice = parseFloat(responseWrapper.data.amount);
+                    const formattedPrice = numericPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    displayTextField.innerText = "Value: $" + formattedPrice + " USD";
                 } else {
-                    displayTextField.innerText = "Value: Offline/Error";
+                    displayTextField.innerText = "Value: Unavailable";
                 }
             })
             .catch(err => {
-                console.error("Local route error:", err);
-                displayTextField.innerText = "Value: Offline/Error";
+                console.warn("Could not retrieve live crypto rate from Java backend:", err);
+                displayTextField.innerText = "Value: Offline Mode";
             });
     }
-
-
     function fetchAndBuildNavigator() {
         fetch('/api/lessons').then(res=>res.json()).then(data => {
             globalLessonsList = data;
